@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Amazon US Area Rugs 行业地图 v0.10：市场、细分、Keyword、VOC、机会单元与利润全部整合为一份可视化文档。">
+<title>Amazon US Area Rugs 行业地图 v0.10</title>
+<style>
+  :root{--ink:#102a2d;--muted:#627477;--paper:#f4f1ea;--card:#fffdf8;--line:#d9d6ca;--teal:#0d756d;--mint:#cfe7df;--orange:#d7772d;--red:#b34a3c;--navy:#173b55;--shadow:0 18px 50px rgba(16,42,45,.08)}
+  *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei",sans-serif}
+  .shell{max-width:1440px;margin:auto;padding:0 30px 90px}.topbar{position:sticky;top:0;z-index:20;background:rgba(244,241,234,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(16,42,45,.1)}
+  .topbar-inner{max-width:1440px;margin:auto;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap}.brand{font-weight:800;letter-spacing:.02em}.brand small{display:block;color:var(--muted);font-weight:500;font-size:11px;margin-top:2px}.nav{display:flex;gap:15px;font-size:12.5px;flex-wrap:wrap}.nav a{color:var(--muted);text-decoration:none}.nav a:hover{color:var(--teal)}
+  .toolbar{display:flex;gap:8px;align-items:center}.tool-btn{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 12px;font:inherit;font-size:11.5px;cursor:pointer}.tool-btn:hover{border-color:var(--teal);color:var(--teal)}.tool-btn.primary{background:var(--teal);border-color:var(--teal);color:white}
+  .hero{padding:64px 0 30px;display:grid;grid-template-columns:1.3fr .7fr;gap:26px;align-items:end}.eyebrow{color:var(--teal);font-weight:800;letter-spacing:.15em;text-transform:uppercase;font-size:12px}.hero h1{font-family:Georgia,"Microsoft YaHei",serif;font-size:clamp(38px,5.4vw,72px);line-height:1;margin:14px 0 18px;max-width:950px;letter-spacing:-.03em;text-wrap:balance}.hero p{font-size:15.5px;color:var(--muted);line-height:1.8;max-width:800px}
+  .gate{background:var(--ink);color:white;border-radius:22px;padding:24px;box-shadow:var(--shadow)}.gate .label{font-size:11.5px;color:#a9cbc6;letter-spacing:.1em}.gate strong{display:block;font-size:23px;margin:8px 0}.gate p{font-size:12.5px;color:#d0dedc;margin:0;line-height:1.6}.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.badge{border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 10px;font-size:10.5px}.badge.warn{background:#7a362d;border-color:#a94a3d}
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:11px;margin:18px 0 34px}.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px 16px;min-height:118px}.kpi .value{font-family:Georgia,serif;font-size:29px;margin:7px 0}.kpi .label{font-size:11.5px;color:var(--muted);line-height:1.5}.kpi .source{font-size:9.5px;color:#8a9999;margin-top:8px}
+  .section{margin-top:44px}.section-head{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid var(--line);padding-bottom:13px;margin-bottom:19px;flex-wrap:wrap;gap:10px}.section-head h2{font-family:Georgia,"Microsoft YaHei",serif;font-size:29px;margin:0}.section-head p{margin:0;color:var(--muted);font-size:12.5px}
+  .segment-grid{display:grid;grid-template-columns:.9fr 1fr 1.1fr;gap:16px}.donut-card,.map-card,.chart-card,.panel,.table-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}.donut-wrap{display:flex;align-items:center;justify-content:center;min-height:220px}.donut{width:190px;height:190px;border-radius:50%;background:conic-gradient(#0d756d 0 58.52%,#d7772d 58.52% 85.80%,#4f91a7 85.80% 92.72%,#8a78a8 92.72% 96.25%,#b19859 96.25% 98.58%,#a85343 98.58% 99.45%,#75868a 99.45%);position:relative}.donut:after{content:"核心Parent\A销量结构";white-space:pre;position:absolute;inset:26px;border-radius:50%;background:var(--card);display:grid;place-items:center;text-align:center;color:var(--muted);font-size:11px;line-height:1.6}.legend{display:grid;gap:8px;margin-top:16px}.legend-row{display:grid;grid-template-columns:9px 1fr auto;gap:9px;align-items:center;font-size:11.5px}.dot{width:8px;height:8px;border-radius:50%}
+  .map-card h3,.chart-card h3,.panel h3{margin:0 0 4px;font-size:14.5px}.chart-note{font-size:10.5px;color:var(--muted);margin:0 0 12px}
+  .chart-box{position:relative;width:100%}canvas{display:block;width:100%;height:100%}
+  .note{margin-top:16px;padding:13px 16px;border-left:4px solid var(--orange);background:#fff6e8;color:#604c37;font-size:11.5px;line-height:1.7}
+  .ai-box{margin-top:16px;background:#eef8f4;border:1px solid #cfe1dc;border-radius:14px;padding:16px 19px}
+  .ai-box .ai-label{display:flex;align-items:center;gap:7px;font-size:10.5px;font-weight:800;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+  .ai-box .ai-label i{width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block}
+  .ai-box ul{margin:0;padding-left:18px}
+  .ai-box li{font-size:12px;line-height:1.75;color:#173b34;margin-bottom:6px}
+  .ai-box li:last-child{margin-bottom:0}
+  .ai-box li b{color:var(--ink)}
+  .ai-box.risk{background:#fff4e8;border-color:#ecd0b0}
+  .ai-box.risk .ai-label{color:#9f5225}
+  .ai-box.risk .ai-label i{background:#9f5225}
+  .chart-conclusion{margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);font-size:11px;line-height:1.6;color:var(--ink)}
+  .chart-conclusion b{color:var(--teal)}
+  .card-title{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}.card-title p{margin:4px 0 0;color:var(--muted);font-size:10.5px;line-height:1.5}
+  .two-col{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}
+  .insight-stack{display:grid;gap:9px}.insight{padding:14px;border-radius:13px;background:#eef5f2;border:1px solid #cfe1dc}.insight.warn{background:#fff4e8;border-color:#ecd0b0}.insight h4{margin:0 0 5px;font-size:12.5px}.insight p{font-size:10.5px;color:var(--muted);line-height:1.6;margin:0}
+  .explorer{display:grid;grid-template-columns:280px 1fr;gap:16px}.segment-tabs{display:grid;gap:7px}.segment-tab{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 13px;text-align:left;cursor:pointer;color:var(--ink)}.segment-tab strong{display:block;font-size:11.5px}.segment-tab small{display:block;color:var(--muted);margin-top:4px}.segment-tab.active{border-color:var(--teal);box-shadow:inset 4px 0 var(--teal);background:#eef8f4}
+  .detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:16px}.detail-stat{padding:13px;border-radius:12px;background:#f3f4ef}.detail-stat span{display:block;font-size:9.5px;color:var(--muted);margin-bottom:6px}.detail-stat b{font-size:18px;font-family:Georgia,serif}
+  .tag-list{display:flex;flex-wrap:wrap;gap:6px}.tag{padding:6px 9px;border-radius:8px;background:#f2eee5;font-size:10.5px;color:#516164}.tag.risk{background:#fae9e2;color:#914c3d}.tag.good{background:#e4f2ed;color:#176b62}
+  .opportunity-table{width:100%;border-collapse:collapse;font-size:11px}.opportunity-table th{text-align:left;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line);padding:10px 8px}.opportunity-table td{padding:11px 8px;border-bottom:1px solid #ebe8df}.opportunity-table tr:last-child td{border:0}.score{font-family:Georgia,serif;font-size:16px}.decision{display:inline-block;padding:5px 8px;border-radius:7px;font-size:9px;font-weight:700}.decision.keep{background:#dff1e9;color:#146d62}.decision.conditional{background:#fff0cf;color:#8b5b06}.decision.risk{background:#f8e2da;color:#914233}.decision.pause{background:#e8e9e4;color:#657172}.table-scroll{overflow-x:auto}
+  .cell-card{border:1px solid var(--line);border-radius:20px;padding:24px;margin-top:18px;background:var(--card);box-shadow:var(--shadow)}.cell-card.risk{border-color:#e9c1a7;background:#fffaf6}
+  .cell-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}.cell-title{display:flex;gap:13px;align-items:center}.cell-rank{width:36px;height:36px;border-radius:50%;background:var(--mint);color:var(--teal);display:grid;place-items:center;font-family:Georgia,serif;font-weight:700;font-size:15px;flex:none}.cell-card.risk .cell-rank{background:#f5d9c6;color:#9f5225}.cell-title h3{margin:0;font-size:18px}.cell-title span{display:block;color:var(--muted);font-size:11.5px;margin-top:3px}
+  .cell-body{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}.block{margin-bottom:18px}.block:last-child{margin-bottom:0}.block h4{margin:0 0 9px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.concept{font-size:13px;line-height:1.72;background:#f3f4ef;border-radius:12px;padding:13px 15px}.cell-card.risk .concept{background:#fdf1e8}
+  .comp-list{display:grid;gap:7px}.comp-row{display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:center;font-size:11.5px;padding:8px 10px;border:1px solid var(--line);border-radius:10px}.comp-row a{color:var(--navy);text-decoration:none;font-weight:600}.comp-row a:hover{text-decoration:underline}.comp-row .pain-tag{font-size:9.5px;color:var(--red);background:#f8e2da;padding:3px 6px;border-radius:6px;white-space:nowrap}.comp-row .price{font-family:Georgia,serif;font-size:12.5px;white-space:nowrap}
+  .waterfall-wrap{margin-top:8px}.supplier-row{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.6}.gate-tag{display:inline-block;margin-top:8px;padding:5px 9px;border-radius:7px;background:#f8e2da;color:#914233;font-size:9.5px;font-weight:700}
+  .diff-list{display:grid;gap:8px}.diff-item{padding:10px 12px;border-radius:10px;background:#eef8f4;border:1px solid #cfe1dc;font-size:11.5px;line-height:1.6}.cell-card.risk .diff-item{background:#fff4e8;border-color:#ecd0b0}.diff-item b{display:block;font-size:12px;margin-bottom:2px}
+  .chart-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:10.5px;color:var(--muted)}.chart-legend span{display:flex;align-items:center;gap:5px}.chart-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+  .pipeline{display:grid;grid-template-columns:repeat(10,1fr);gap:7px}.stage{padding:12px 8px;border-radius:12px;min-height:96px;border:1px solid var(--line);background:var(--card)}.stage .num{font-size:9.5px;color:var(--muted)}.stage strong{display:block;font-size:10.5px;margin:7px 0}.stage span{font-size:8.5px}.stage.done{border-top:4px solid var(--teal)}.stage.conditional{border-top:4px solid var(--orange)}.stage.blocked{border-top:4px solid var(--red)}.stage.progress{border-top:4px solid var(--navy)}
+  .source-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.source-card{padding:15px;border-radius:13px;background:var(--card);border:1px solid var(--line)}.source-card strong{font-size:11.5px}.source-card p{font-size:9.5px;color:var(--muted);line-height:1.6;margin:6px 0 0}.assumption-list{columns:2;column-gap:26px;margin:0;padding-left:17px}.assumption-list li{font-size:10.5px;color:var(--muted);line-height:1.7;margin-bottom:7px;break-inside:avoid}
+  .footer{margin-top:52px;border-top:1px solid var(--line);padding-top:20px;display:flex;justify-content:space-between;gap:18px;color:var(--muted);font-size:9.5px;flex-wrap:wrap}
+  code{background:#eceae2;padding:1px 5px;border-radius:5px;font-size:.92em}
+  @media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.two-col{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(5,1fr)}.source-grid{grid-template-columns:repeat(2,1fr)}.segment-grid{grid-template-columns:1fr}.explorer{grid-template-columns:220px 1fr}.cell-body{grid-template-columns:1fr}}
+  @media(max-width:950px){.hero{grid-template-columns:1fr}.nav{display:none}.hero{padding-top:44px}.shell{padding-left:18px;padding-right:18px}.explorer{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(2,1fr)}.detail-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.kpis{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:40px}.source-grid{grid-template-columns:1fr}.assumption-list{columns:1}.opportunity-table{min-width:720px}.footer{display:block}.footer span{display:block;margin-top:7px}}
+  @media print{.topbar,.toolbar,.segment-tabs{display:none!important}.shell{max-width:none;padding:0 12px}.section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner"><div class="brand">AREA RUGS / US<small>行业地图 · 合并可视化版 v0.10</small></div><nav class="nav"><a href="#overview">概览</a><a href="#segments">细分对比</a><a href="#market">市场趋势</a><a href="#pricesize">价格矩阵</a><a href="#brands">品牌矩阵</a><a href="#opportunity">机会矩阵</a><a href="#keyword">Keyword</a><a href="#voc">VOC</a><a href="#cells">机会单元</a><a href="#profit">利润对比</a><a href="#method">口径</a></nav><div class="toolbar"><button class="tool-btn primary" type="button" onclick="window.print()">打印 / PDF</button></div></div></header>
+<main class="shell">
+  <section class="hero" id="overview">
+    <div><div class="eyebrow">Industry Map · v0.10 · 2026-08-27 · 合并版</div><h1>Amazon US<br>Area Rugs 行业地图</h1><p>把此前两份文档（总览 v0.9.0 + 机会单元深度卡片 v0.9.1）合并为一份，并把大段文字换成条形图、热力图、散点图和成本瀑布图——同一页内可以直接比较7个细分、8个机会单元和3个候选SKU的表现，不用来回切页面。</p></div>
+    <aside class="gate" id="gate"><div class="label">CURRENT DECISION GATE</div><strong>研究结论可用 · 商业立项阻断</strong><p>市场、商品、Keyword、VOC与价格带机会已形成闭环；正式FOB、实测包装、官方FBA、HTS与经营实际尚未放行。</p><div class="badges"><span class="badge">MAP READY</span><span class="badge">7 SEGMENTS</span><span class="badge">6 OPPORTUNITY CELLS</span><span class="badge warn">PROFIT BLOCKED</span></div></aside>
+  </section>
+  <section class="kpis" aria-label="关键数据规模">
+    <article class="kpi"><div class="label">统一商品池</div><div class="value">26,157</div><div class="source">唯一ASIN · v0.20</div></article>
+    <article class="kpi"><div class="label">Parent月度观察</div><div class="value">4,800</div><div class="source">12个月 × Top400</div></article>
+    <article class="kpi"><div class="label">标准Keyword</div><div class="value">8,168</div><div class="source">15,463条观察</div></article>
+    <article class="kpi"><div class="label">去重Review</div><div class="value">67,247</div><div class="source">83份有效VOC报告</div></article>
+    <article class="kpi"><div class="label">VOC榜单覆盖</div><div class="value">98/100</div><div class="source">Rank2 / 88保持缺失</div></article>
+    <article class="kpi"><div class="label">FBA交叉验证</div><div class="value">2,528</div><div class="source">唯一Child ASIN</div></article>
+  </section>
+  <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
+    <li>Area Rugs是一个<b>被单一细分主导的市场</b>——Washable Printed Low-Pile一家占核心销量结构58.5%，且12个月还在以+9.5pp的速度扩大，这不是一个均衡的七分天下格局，资源应向这个细分倾斜而不是均匀分布。</li>
+    <li>数据完整度不均衡：商品端、机会漏斗、利润模型三块证据链完整（Gate 1-7基本走完），但VOC和Keyword只做到"条件完成"（Rank2/88缺失、部分细分Reverse样本不足），意味着面向Washable/Shag两个大盘细分的结论置信度明显高于其余5个细分。</li>
+    <li>当前处于"研究结论可用、商业立项阻断"的中间状态——市场选得出方向，但正式FOB/实测包装/官方FBA费率这三项没拿到之前，任何一个价格带都不能直接下单。</li>
+  </ul></div>
+
+  <section class="section" id="segments">
+    <div class="section-head"><h2>七个一级细分 · 横向对比</h2><p style="margin:0;color:var(--muted);font-size:12.5px">v0.3 Data Validated</p></div>
+    <div class="segment-grid">
+      <article class="donut-card"><h3>核心Parent销量结构</h3><p class="chart-note">2026-07 · 七结构内部归一化</p><div class="donut-wrap"><div class="donut" role="img" aria-label="Washable 58.5%，Shag 27.3%，其他13.2%"></div></div><div class="legend" id="donutLegend"></div>
+        <div class="chart-conclusion">结论：<b>Washable一家占58.5%</b>，超过其余六个细分总和，市场不是均衡分布，而是单一细分主导。</div>
+      </article>
+      <article class="chart-card"><h3>规模 vs 负评率</h3><p class="chart-note">销量份额（条）与Review负评率（数字），同图对比"大不大"和"稳不稳"</p><div class="chart-box" style="height:300px"><canvas id="segBar"></canvas></div>
+        <div class="chart-conclusion">结论：Shag销量份额第二（27.3%）但负评率也是七结构<b>最高（31.5%）</b>，规模和口碑不匹配；Handmade Wool规模最小但负评率反而最低（14.3%），小而美但没有量。</div>
+      </article>
+      <article class="chart-card"><h3>增长 × 风险 四象限</h3><p class="chart-note">X=12个月份额变化(pp) · Y=Review负评率(%) · 气泡=Parent数量</p><div class="chart-box" style="height:300px"><canvas id="segScatter"></canvas></div>
+        <div class="chart-legend"><span><i style="background:#0d756d"></i>右下=规模增长且风险低</span><span><i style="background:#b34a3c"></i>左上=份额下滑且风险高</span></div>
+        <div class="chart-conclusion">结论：只有Washable落在右下"健康区"；Shag独占左上"高风险"象限，是唯一份额下滑同时负评率还在七结构里最高的细分。</div>
+      </article>
+    </div>
+    <div class="note">Washable Printed Low-Pile 在四象限图里明显位于"份额上升(+9.5pp)+负评率中等偏低"的健康区间；Shag/Plush 份额下滑(-6.1pp)且负评率七结构最高(31.5%)，是唯一同时踩两个风险信号的大盘细分。</div>
+    <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
+      <li>七个细分可以分成三档：<b>Washable一家独大</b>（58.5%，还在增长）；<b>Shag/Outdoor两个"大但有问题"</b>（Shag份额下滑+负评率最高，Outdoor增长但Top1品牌占65.3%高度集中）；<b>其余四个细分体量太小</b>（Machine Modern/Natural Fiber/Traditional/Handmade Wool合计不到核心销量的7%），不建议作为新品切入的主战场。</li>
+      <li>Handmade Wool细分证据等级最低（仅3个品牌、49条VOC Review），任何基于这个细分的结论都应该标"低置信度"，不能和Washable的结论同等看待。</li>
+    </ul></div>
+  </section>
+
+  <section class="section" id="market">
+    <div class="section-head"><h2>市场与竞争结构</h2><p>SellerSprite Parent Top400 · 2025-08—2026-07</p></div>
+    <div class="two-col">
+      <article class="chart-card"><div class="card-title"><div><h3>核心细分12个月份额趋势</h3><p>仅核心七结构内部归一化，显示相对变化而非Amazon全市场份额</p></div></div><div class="chart-box" style="height:320px"><canvas id="trendChart"></canvas></div><div class="chart-legend"><span><i style="background:#0d756d"></i>Washable</span><span><i style="background:#d7772d"></i>Shag</span><span><i style="background:#4f91a7"></i>Outdoor</span></div>
+        <div class="chart-conclusion">结论：2025-12出现一次明显异动——Washable份额骤降到38.6%、Shag骤升到47.1%，此后2026-03又反向剧烈波动，说明这两个细分之间存在<b>此消彼长的替代效应</b>，不是各自独立增长。</div>
+      </article>
+      <aside class="panel"><div class="card-title"><div><h3>竞争信号</h3><p>规模、集中度与趋势需要同时判断</p></div></div><div class="insight-stack"><div class="insight"><h4>Washable：大盘、分散、增长</h4><p>190个核心Parent、101个品牌；Top1品牌仅10.5%，12个月份额+9.5pp。</p></div><div class="insight warn"><h4>Shag：大盘但风险上升</h4><p>份额−6.1pp，负评率31.5%为七结构最高，技术问题不应被低价销量掩盖。</p></div><div class="insight warn"><h4>Outdoor：增长但高度集中</h4><p>份额+1.8pp，但Top1品牌占65.3%；当前样本更像强头部市场。</p></div></div></aside>
+    </div>
+    <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
+      <li>Washable是三个信号里唯一"三好"的细分——规模大、份额涨、品牌不集中（brand_hhi=286.9，七结构里最低）——这是新品最容易切进去、不需要正面硬刚头部品牌的细分。</li>
+      <li>Outdoor看起来在增长（+1.8pp），但65.3%被CAMILSON一家占据，本质是"强头部市场"而非"开放市场"，新品进入更像是挑战CAMILSON，而不是分享增量。</li>
+      <li>Shag的12个月趋势波动幅度全场最大（月度份额在18.1%~47.1%之间反复横跳），这种不稳定本身也是一个风险信号，不只是负评率的问题。</li>
+    </ul></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>细分市场浏览器</h2><p>点击细分查看价格、品牌、Review与VOC</p></div>
+    <div class="explorer"><div class="segment-tabs" id="segmentTabs"></div><article class="panel" id="segmentDetail" aria-live="polite"></article></div>
+  </section>
+
+  <section class="section" id="pricesize">
+    <div class="section-head"><h2>细分 × 尺寸/形状 价格矩阵</h2><p>各细分下不同尺寸/形状的中位售价与price_per_sqft · 地毯跨尺寸不能直接比售价，必须看单位面积价</p></div>
+    <article class="chart-card"><h3>中位售价热力图（$）</h3><p class="chart-note">数值=该细分该尺寸的中位售价；空白=样本量不足或该尺寸在该细分无有效Parent</p><div class="chart-box" style="height:300px"><canvas id="priceHeatmap"></canvas></div>
+      <div class="chart-conclusion">结论：同样是8x10，Natural Fiber($250)是Shag($46)的<b>5.4倍</b>——单看售价完全无法跨细分比较，材质/工艺溢价差异巨大。</div>
+    </article>
+    <article class="chart-card" style="margin-top:16px"><h3>中位Price per Sqft热力图（$/sqft）</h3><p class="chart-note">按面积折算后的单位价格，才是跨尺寸、跨细分比较的正确口径</p><div class="chart-box" style="height:300px"><canvas id="ppsfHeatmap"></canvas></div>
+      <div class="chart-conclusion">结论：换算成$/sqft后，Shag的Round款($7.88/sqft)反而是全表最贵的单位面积价格，比它自己的8x10款($0.57/sqft)贵了<b>13.7倍</b>——小尺寸/异形款的单位面积溢价远高于大尺寸标品，这个规律在多个细分里重复出现（Washable的2x3=$3.62/sqft vs 8x10=$0.91/sqft）。</div>
+    </article>
+    <article class="table-card" style="margin-top:16px"><div class="card-title"><div><h3>细分×尺寸明细（48条，按细分分组）</h3><p>Parent数<3的行样本量较小，价格区间(P25-P75)供参考</p></div></div><div class="table-scroll"><table class="opportunity-table"><thead><tr><th>细分</th><th>尺寸/形状</th><th>Parent数</th><th>估算月销量</th><th>中位价</th><th>价格区间(P25-P75)</th><th>中位$/sqft</th><th>细分内销量占比</th></tr></thead><tbody id="priceSizeTable"></tbody></table></div></article>
+    <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
+      <li>Washable的尺寸覆盖最完整（12种尺寸/形状全部有数据），且8x10是绝对主力（37.7%细分内销量）中位价$72.89、$0.91/sqft——是目前样本量最扎实、可信度最高的一格，适合作为新品定价的锚点。</li>
+      <li>Shag的Round款只有1个Parent（$99.00，$7.88/sqft），Machine Woven Traditional和Handmade Wool多数尺寸格子都是空的或只有1个Parent——这些格子的价格数字仅供方向参考，不能当成"这个细分这个尺寸就该卖这个价"的定价依据，样本量不够。</li>
+      <li>价格区间(P25-P75)能看出定价分散度：Washable的8x10价格区间$64.79-$94.49，相对集中；Natural Fiber的8x10区间$161.12-$265.50，跨度更大——说明后者的品牌/工艺分层比Washable更明显，新品定位需要更精确地卡进某个子价格带，而不是笼统对标"细分中位价"。</li>
+    </ul></div>
+  </section>
+
+  <section class="section" id="brands">
+    <div class="section-head"><h2>品牌矩阵与产品切入点定位图</h2><p>Amazon对标品牌 × 独立站/GMC同品牌 · 价格、月销、尺寸与切入点</p></div>
+    <article class="chart-card"><h3>跨渠道品牌：Amazon价格 vs 独立站(GMC)价格</h3><p class="chart-note">仅6个品牌在Amazon和GMC站外都被观察到（CROSS_CHANNEL_VISIBLE）；同品牌可能在不同细分各有一条Amazon价格记录</p><div class="chart-box" style="height:260px"><canvas id="crossChannelBar"></canvas></div>
+      <div class="chart-legend"><span><i style="background:#0d756d"></i>Amazon中位价</span><span><i style="background:#173b55"></i>独立站/GMC中位价</span></div>
+      <div class="chart-conclusion">结论：10组对比里9组独立站价格更高，Loloi(Mach.Modern)溢价<b>+222%</b>最夸张；唯一反例是PureCozy的Washable款，独立站价还比Amazon低14%。</div>
+    </article>
+    <div class="note">除PureCozy的Washable款(独立站反而略低于Amazon)外，其余全部品牌独立站定价明显高于Amazon——nuLOOM+40%、Loloi+222%、Lahome(Outdoor)+358%、SAFAVIEH+22%。说明这批头部品牌把Amazon当走量/引流渠道，独立站承担更高端定位；新品牌如果只做Amazon低价走量，很难往独立站溢价方向自然过渡，需要单独设计产品分层。</div>
+
+    <div class="section-head" style="border:none;margin-top:22px;padding-bottom:0"><h3 style="font-family:Georgia,serif;font-size:20px;margin:0">七个细分 · 品牌定位图（各细分Top5）</h3><p style="margin:0;color:var(--muted);font-size:12px">X=中位售价 Y=估算月销量 · 气泡大小=Parent数量 · 颜色=渠道</p></div>
+    <div id="brandScatterGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px"></div>
+    <div class="chart-legend" style="margin-top:10px"><span><i style="background:#0d756d"></i>仅Amazon可见</span><span><i style="background:#173b55"></i>跨渠道(Amazon+独立站)</span></div>
+
+    <article class="table-card" style="margin-top:18px"><div class="card-title"><div><h3>七个细分品牌切入点明细（各Top5，合计31个品牌）</h3><p>按细分分组，细分内按Amazon月销量降序</p></div></div><div class="table-scroll"><table class="opportunity-table"><thead><tr><th>细分</th><th>品牌</th><th>Parent数</th><th>月销量</th><th>中位价</th><th>主力尺寸</th><th>价格带</th><th>渠道</th><th>产品切入点</th></tr></thead><tbody id="brandTableAll"></tbody></table></div></article>
+    <div class="source-row" style="font-size:10.5px;color:var(--muted);margin-top:10px">数据源：04_analysis_modules/02_market_competition/2026-08-25_v0.26.0/amazon_brand_segment_matrix_v026.csv、gmc_brand_segment_matrix_v026.csv、02_market_competition/2026-08-24_v0.23.0/latest_top15_parents_by_segment.csv与seller_sprite_parent_panel_enriched.csv（用于补链接）。渠道分类（AMAZON_ONLY_OBSERVED / CROSS_CHANNEL_VISIBLE）为原始数据自带字段，产品链接取该品牌在该细分月销量最高的一个Parent/Child ASIN作为代表款，不一定是中位价对应的那一款；切入点为基于该品牌真实商品属性(attrs)、尺寸和价格带的归纳描述，不是营销话术。Machine Woven Traditional与Handmade Wool两个细分总品牌数不足5个，如实展示实际数量（3个）。</div>
+
+    <div class="section-head" style="border:none;margin-top:30px;padding-bottom:0"><h3 style="font-family:Georgia,serif;font-size:20px;margin:0">七个细分 · 独立站(DTC)品牌产品布局</h3><p style="margin:0;color:var(--muted);font-size:12px">仅在Google Merchant站外样本观察到、未在Amazon对应细分出现的品牌（GMC_ONLY_OBSERVED）</p></div>
+    <article class="chart-card" style="margin-top:14px"><h3>DTC品牌上新活跃度排行</h3><p class="chart-note">按12个月内独立站累计上新商品数排序，Top12，标签含所属细分</p><div class="chart-box" style="height:340px"><canvas id="dtcBar"></canvas></div>
+      <div class="chart-conclusion">结论：Top12里<b>nuLOOM占了3席</b>（Handmade Wool 21款、Machine Modern 19款、Natural Fiber 9款），是独立站侧唯一能对标Loloi/SAFAVIEH的多细分品牌。</div>
+    </article>
+    <article class="table-card" style="margin-top:16px"><div class="card-title"><div><h3>七个细分DTC品牌明细（各Top5，合计35条）</h3><p>价格为独立站最新中位价；部分品牌当前在架商品数为0，代表该品牌12个月内曾上新但样本采集时点已下架/断货。独立站数据没有可点击的商品链接，用"代表款标题"栏可以直接拿去Google/独立站官网搜索定位到具体款式</p></div></div><div class="table-scroll"><table class="opportunity-table"><thead><tr><th>细分</th><th>独立站品牌</th><th>代表款标题</th><th>独立站中位价</th><th>价格带</th><th>可见月数(12M)</th><th>累计上新数(12M)</th><th>当前在架数</th></tr></thead><tbody id="dtcTableAll"></tbody></table></div></article>
+    <div class="note">Washable/Shag两个大盘细分的DTC头部是Bungalow Rose、Mercer41、Wayfair这类家居电商平台自营品牌，而非独立设计师品牌；Handmade Wool细分DTC价格带最高（nuLOOM $526.5、Dash and Albert $557.25中位价），和Amazon该细分中位价仅$22.67-130.87形成巨大落差——说明高端手工羊毛地毯的真实定价锚点在独立站/家居电商，Amazon目前该细分可能还没有承接住高端需求。代表款标题取自03_processed_data/02_classified/2026-08-25_v0.26.0/gmc_brand_visibility_classified_v026.csv中该品牌该细分下、价格最接近中位价的一条真实商品标题；GMC原始数据的"来源URL"字段是内部报表链接，不是可访问的商品页，因此这里用标题代替链接，可直接拿去Google/独立站站内搜索定位。</div>
+    <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
+      <li>Loloi、SAFAVIEH、Jonathan Y 三个品牌是<b>全场景玩家</b>——同时出现在4-5个细分且全部跨渠道经营，是这个类目里唯一具备"多细分+多渠道"能力的对手，值得长期盯防而不是当作某一个细分的局部竞品。</li>
+      <li>Amazon与独立站的价格落差随细分"档次"拉大：Washable/Shag这类走量细分两个渠道价格接近甚至独立站更低（PureCozy），但Machine Modern/Natural Fiber/Handmade Wool这些细分独立站溢价22%~358%——说明<b>品类越"重装饰/重材质"，独立站的溢价能力越强</b>，纯Amazon玩家很难在这些细分建立高端心智。</li>
+      <li>Washable/Shag两个大盘细分几乎是"白牌天下"（RELEANY、cotiled、yulidayang等，仅Amazon可见），DTC头部反而是Bungalow Rose、Wayfair这类家居电商平台自营品牌而非同一批白牌——意味着这两个细分的Amazon白牌打法和独立站打法是两套完全不同的玩家和逻辑，不能假设Amazon做得好独立站就能直接复制。</li>
+    </ul></div>
+  </section>
+
+  <section class="section" id="opportunity">
+    <div class="section-head"><h2>A/B价格带机会矩阵</h2><p>市场证据排序，不是销量预测或立项批准</p></div>
+    <article class="chart-card"><h3>8个验证单元排序</h3><p class="chart-note">验证分＝初筛×75%＋Evidence×25%−风险扣分 · 颜色=决策</p><div class="chart-box" style="height:280px"><canvas id="oppBar"></canvas></div>
+      <div class="chart-legend"><span><i style="background:#0d756d"></i>KEEP_PRIORITY</span><span><i style="background:#d7772d"></i>KEEP_CONDITIONAL</span><span><i style="background:#b34a3c"></i>DOWNGRADE/RISK</span><span><i style="background:#8a8a86"></i>PAUSE</span></div>
+      <div class="chart-conclusion">结论：Top4验证单元<b>全部是Washable</b>（85.2/75.6/75.4/70.6分），Shag最高分只有54.6，两个细分不在一个量级上。</div>
+    </article>
+    <article class="chart-card" style="margin-top:16px"><h3>细分 × 价格带 热力图</h3><p class="chart-note">仅Washable和Shag两个大盘细分完成了价格带拆分验证；数值=验证分</p><div class="chart-box" style="height:220px"><canvas id="heatmap"></canvas></div>
+      <div class="chart-conclusion">结论：Washable的验证分随价格带升高先涨后跌（<$30的70.6→$50-79.99峰值85.2→$200+跌到28.4），<b>中间价格带是甜蜜点</b>，两端都偏弱。</div>
+    </article>
+    <article class="table-card" style="margin-top:16px"><div class="card-title"><div><h3>详细数据</h3></div></div><div class="table-scroll"><table class="opportunity-table"><thead><tr><th>Rank</th><th>结构</th><th>价格带</th><th>Parent</th><th>估算月销量</th><th>验证分</th><th>结论</th><th>置信度</th></tr></thead><tbody id="opportunityBody"></tbody></table></div></article>
+    <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
+      <li>验证分排名前4名全部是Washable，从$30到$199.99连续四个价格带都过筛（Rank1/2/3=KEEP_PRIORITY，Rank4=KEEP_CONDITIONAL）——这是唯一一个"全价格带都能打"的细分，说明问题不是选哪个价格带，而是先把Washable做透。</li>
+      <li>Shag的两个价格带（Rank5/7）验证分只有54.6和42.1，主因是风险扣分（高负评率+掉毛/背衬工艺问题），不是需求不够——如果不能先解决这两个工艺痛点，提高价格带（<$30→$30-49.99）反而让分数从54.6掉到42.1，说明<b>Shag不能靠涨价绕开质量问题</b>。</li>
+      <li>热力图里Machine Modern/Natural Fiber/Traditional/Handmade Wool四个细分整行是空的——这不是它们没机会，而是机会漏斗目前只对Washable和Shag两个大盘细分做了价格带拆分验证，其余细分要得出同等质量的结论，需要先补这一步。</li>
+    </ul></div>
+  </section>
+
+  <section class="section" id="keyword">
+    <div class="section-head"><h2>Keyword需求地图</h2><p>8,168个标准Keyword · 搜索量不是市场规模</p></div>
+    <div class="two-col">
+      <article class="panel"><div class="card-title"><div><h3>已观察搜索量的需求意图</h3><p>类目主表中有搜索量记录的Keyword</p></div></div><div class="chart-box" style="height:230px"><canvas id="intentBar"></canvas></div>
+        <div class="chart-conclusion">结论：通用词+多属性组合词合计占<b>59.5%</b>，远超尺寸词(13.7%)和功能词(1.5%)，说明用户搜索还停留在泛需求阶段，精准长尾词的流量池相对小。</div>
+      </article>
+      <aside class="panel" style="background:var(--navy);color:white;border:none"><span class="eyebrow" style="color:#8fc8bf">Demand expression</span><div style="font-size:52px;font-family:Georgia,serif;margin:8px 0">88.7%</div><p style="font-size:11.5px;line-height:1.7;color:#d1dce3">已观察搜索量来自通用词、尺寸、形状和场景组合。用户首先用"用途＋尺寸＋风格"表达需求。</p></aside>
+    </div>
+
+    <div class="section-head" style="border:none;margin-top:26px;padding-bottom:0"><h3 style="font-family:Georgia,serif;font-size:20px;margin:0">细分机会下的需求意图与关键词</h3><p style="margin:0;color:var(--muted);font-size:12px">7个细分的显式结构关键词聚类，用于和VOC购买驱动/负评痛点交叉验证</p></div>
+    <article class="chart-card" style="margin-top:14px"><h3>细分关键词搜索量对比</h3><p class="chart-note">显式提及该细分结构词的Keyword聚类，非该细分全部相关搜索</p><div class="chart-box" style="height:260px"><canvas id="segKwBar"></canvas></div>
+      <div class="chart-conclusion">结论：Washable(44,185)和Handmade Wool(16,032)的显式结构词搜索量最高；<b>Outdoor几乎没有显式搜索量（仅87）</b>，尽管它在核心销量里占6.9%——说明Outdoor的流量入口几乎全靠"9x12 area rug"这类通用词，站内搜索"outdoor rug"的用户反而很少。</div>
+    </article>
+    <div id="segKwGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px"></div>
+
+    <article class="table-card" style="margin-top:18px"><div class="card-title"><div><h3>关键词 × VOC 交叉验证</h3><p>关键词体现"购买前想要什么"，VOC体现"用后发现了什么问题"——两者重合度低恰恰说明VOC补上了关键词看不到的盲区</p></div></div><div class="table-scroll"><table class="opportunity-table"><thead><tr><th>细分</th><th>关键词体现的核心诉求</th><th>对应VOC购买驱动</th><th>关键词未覆盖的VOC痛点</th><th>佐证程度</th></tr></thead><tbody id="kwVocTable"></tbody></table></div></article>
+    <div class="note">Keyword主结论可用于行业地图；Natural Fiber、Handmade/Wool、Traditional、Machine Modern仍需补1–2个核心Child Reverse样本，缺口不填0。逐机会单元(价格带层)的关键词搜索量对比见"机会单元深度卡片"。数据源：04_analysis_modules/03_product_segmentation/2026-08-24_v0.22.0/category_keyword_segment_evidence.csv。</div>
+    <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
+      <li>用户搜索时几乎不会直接打出七个结构名（"washable""shag"这类显式结构词合计只占5.6%的搜索表达），而是用"用途+尺寸+风格"组合词——这意味着<b>Listing标题和后台关键词不能只堆结构名</b>，"9x12 living room""washable rug 9x12"这类场景+尺寸词的权重应该更高。</li>
+      <li>CPC普遍在$0.6-0.9区间、竞争难度评分多在60-80，属于中高竞争，低价冲量款很难靠自然流量起量，需要广告预算兜底——这一点在利润模型里已经体现为10-20%的TACoS假设，两者是互相印证的。</li>
+      <li><b>关键词能证实"用户为什么买"，但证实不了"用户为什么退货"</b>——Natural Fiber的搜索词全部是"jute rug""sisal rug"材质词，反映用户冲着天然材质的耐用感去买，但VOC里这个细分负评首位恰恰是"开线/耐用性"(19.1%)——用户买之前预期的耐用和买之后遇到的耐用性问题是同一个主题，说明这个细分的核心矛盾就是"产品没兑现材质本身该有的耐用承诺"，这一层洞察只有VOC能看到，关键词数据看不到。</li>
+    </ul></div>
+  </section>
+
+  <section class="section" id="voc">
+    <div class="section-head"><h2>VOC痛点与购买驱动</h2><p>67,247条去重Review · 直接回连细分的核心样本单独统计</p></div>
+    <div class="two-col">
+      <article class="panel"><div class="card-title"><div><h3>七结构负评率</h3><p>1–3星Review加权口径，从高到低排列</p></div></div><div class="chart-box" style="height:260px"><canvas id="vocBar"></canvas></div>
+        <div class="chart-conclusion">结论：Shag(31.5%)比排名第二的Outdoor(22.3%)高出近10个百分点，是唯一一个负评率明显掉队的大盘细分。</div>
+      </article>
+      <article class="panel voc-detail" id="vocDetail"></article>
+    </div>
+    <article class="panel" style="margin-top:16px"><div class="card-title"><div><h3>Amazon官方细分退货率</h3><p>过去360天；与VOC主题率分母不同，只作方向验证</p></div></div><div class="chart-box" style="height:200px"><canvas id="returnBar"></canvas></div>
+      <div class="chart-conclusion">结论：Jute rug退货率<b>7.79%</b>是5个官方细分里最高的，接近Nursery rug(2.19%)的3.6倍，天然纤维材质的退货风险明显更高。</div>
+    </article>
+    <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
+      <li>"过薄/缺少缓冲"和"色差/褪色"是跨细分共性痛点，几乎每个细分的Top3负评原因里都能看到——这是<b>全类目级别的产品改进方向</b>，不是某个细分独有的问题，任何新品定义都应该默认把这两项当作及格线。</li>
+      <li>Shag的负评率(31.5%)接近Amazon官方Jute rug退货率(7.79%)的4倍，且掉毛/背衬失效是结构性工艺问题——这类问题不能靠客服话术或包装说明缓解，只能从供应链源头（背衬工艺、纤维锁边）解决，否则新品会重复同样的退货率。</li>
+      <li>VOC负评率和Amazon官方退货率是两套不同分母的指标，不能直接相加或替代——退货率反映"退回了多少"，负评率反映"留下评价的人里有多少不满"，两者方向一致时才能互相印证（如Shag两项都偏高），方向不一致时要单独解释。</li>
+    </ul></div>
+  </section>
+
+  <section class="section" id="cells">
+    <div class="section-head"><h2>机会单元深度卡片</h2><p>6个价格带机会单元：产品定义、尺寸、VOC需求、关键词、竞对散点图与差异化方向</p></div>
+    <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
+      <li>四个Washable优先单元的核心需求高度重合——"过薄/缺缓冲""色差/褪色""折痕/不平整"三项几乎在每个价格带都排Top3——说明<b>这不是要为四个价格带分别定义四套产品，而是一套底层结构（防薄背衬+色卡管控+压缩包装回弹）配合四个价格带做尺寸/包装分层</b>，能省下重复打样成本。</li>
+      <li>竞对散点图里，几乎每个单元的Top5竞品都有人被标出具体差评主题，没有一个价格带是"竞品已经做得很完美、新品无处下手"的状态——每个机会单元都能找到具体可执行的差异化切口，不是空泛的"填补市场空白"。</li>
+      <li>两个Shag风险单元放在这里是故意的对照：同样的"过薄"痛点，在Washable是可以通过背衬升级解决的产品问题，在Shag却伴随掉毛/背衬失效这类更难低成本解决的结构性工艺问题——同一个表面痛点，根因和解法可能完全不同。</li>
+    </ul></div>
+    <div id="priorityCells"></div>
+    <div class="section-head" style="margin-top:36px"><h2 style="font-size:24px">风险对照单元</h2><p>Shag两个价格带 · 放这里说明"哪些痛点没人解决但成本上不划算"</p></div>
+    <div id="riskCells"></div>
+  </section>
+
+  <section class="section" id="profit">
+    <div class="section-head"><h2>三档候选SKU · 利润全景对比</h2><p>onepage利润测算逻辑.xlsx 全口径：1688成本+头程+FBA+佣金+Coupon+TACoS+退货+关税</p></div>
+    <article class="chart-card"><h3>净利率对比：3个SKU × 3个场景</h3><p class="chart-note">只有Optimistic场景全部转正；Base/Conservative普遍为负</p><div class="chart-box" style="height:280px"><canvas id="marginGroupBar"></canvas></div>
+      <div class="chart-legend"><span><i style="background:#0d756d"></i>Optimistic</span><span><i style="background:#d7772d"></i>Base</span><span><i style="background:#b34a3c"></i>Conservative</span></div>
+      <div class="chart-conclusion">结论：PREMIUM-8x10的Base和Optimistic都转正（+5.4%/+21.7%），ENTRY-5x7 Base接近打平（-1.6%）；三个SKU的Conservative场景仍全部转负（-21%~-29%），说明成本容错空间依然很窄。</div>
+    </article>
+    <div class="note">2026-08-29模型二次校准：应用户反馈调整两处假设——① 广告TACoS三档统一改为10%（此前Base 15%/Conservative 20%，用户反馈地毯类目稳定期广告费一般在10%左右）；② 汇率三档统一改为¥6.8/$（此前按Optimistic 7.25/Base 7.095/Conservative 6.95分档）。二次校准后三个SKU的净利率<b>进一步改善</b>：ENTRY-5x7 Base −4.6%→<b>−1.6%</b>；CORE-8x10 Base −12.2%→<b>−9.6%</b>；PREMIUM-8x10 Base +2.4%→<b>+5.4%</b>。数据源仍是<a href="https://lyg15911055415-cyber.github.io/fba-calculator/" target="_blank" rel="noopener" style="color:var(--teal)">FBA利润测算台</a>（官方2026-01-15生效FBA费率），普船海派(¥8.2/kg，大森林美东经济卡派)头程渠道，该工具未单列进口关税。三档候选的完整成本瀑布图见上方"机会单元深度卡片"内每张卡片。</div>
+    <div class="ai-box risk"><div class="ai-label"><i></i>AI 分析结论</div><ul>
+      <li>广告TACoS改按地毯类目稳定期真实水平（10%，此前Base用15%偏高）、汇率统一为¥6.8后，<b>PREMIUM-8x10的Base场景净利率升到+5.4%（净利润$5.14/件）</b>，ENTRY-5x7 Base也从明显转负收窄到接近打平（-1.6%）——说明上一版偏保守的广告和汇率假设，把这两个方向的真实盈利能力低估了。CORE-8x10仍是三档里最差的（-9.6%），因包装体积较大触发Small bulky尺寸档，FBA费用高达$18.39/件。</li>
+      <li>三个SKU的Base/Conservative场景亏损主因高度一致：FBA费用（Size Tier一旦从Large standard滑到Small bulky，费用跳升明显）+1688采购成本+平台佣金，这三项加起来通常占售价的55-65%——利润改善的杠杆排序应该是：先控制包装尺寸锁定Large standard Tier，再压采购价，广告和退货率的影响相对更小。</li>
+      <li>这套利润模型里的Coupon/退货率都是场景假设而非目标SKU实测值，广告TACoS已按用户提供的类目经验值校准，但当前用的FBA计算台<b>没有单列进口关税</b>——如果实际清关走双清包税或需要单独缴税，PREMIUM-8x10和ENTRY-5x7 Base这两个转正/接近打平的结果大概率会被吃掉。这些数字只能用于"排优先级"，不能用于"批准立项"，这也是为什么Gate状态仍是BLOCKED_FORMAL_INPUTS，不因为算出了正数字就自动解除。</li>
+    </ul></div>
+
+    <div class="section-head" style="margin-top:36px"><h2 style="font-size:24px">价格矩阵 → 利润机会 交叉验证</h2><p>把"细分×尺寸/形状价格矩阵"（价格矩阵板块）和三档候选SKU的真实尺寸对齐，找出定价偏离真实中位数的地方，并测算一个此前未覆盖的价格带/尺寸组合</p></div>
+    <article class="chart-card">
+      <h3>三档候选 vs 该尺寸真实价格中位数（均为Washable细分）</h3>
+      <div class="table-scroll"><table class="opportunity-table"><thead><tr><th>候选SKU</th><th>测试价</th><th>该尺寸真实中位价</th><th>中位价P25–P75</th><th>价格定位</th><th>该尺寸样本(Parent/月销)</th></tr></thead><tbody>
+        <tr><td>ENTRY-5x7</td><td>$39.99</td><td>$39.99</td><td>$33.37–$52.99</td><td style="color:#0d756d;font-weight:700">贴合中位价</td><td>47 / 210,304</td></tr>
+        <tr><td>CORE-8x10</td><td>$64.79</td><td>$72.89</td><td>$64.79–$94.49</td><td>低于中位价（贴近P25下沿）</td><td>77 / 266,070</td></tr>
+        <tr><td>PREMIUM-8x10</td><td>$94.99</td><td>$72.89</td><td>$64.79–$94.49</td><td style="color:#d7772d;font-weight:700">高于中位价，贴近P75上沿（主动上探人群）</td><td>77 / 266,070</td></tr>
+      </tbody></table></div>
+      <div class="chart-conclusion">结论：ENTRY-5x7的测试价几乎就是该尺寸的真实中位价（真实竞争定价），CORE-8x10反而定在P25附近（比大多数8x10竞品便宜），PREMIUM-8x10定在P75附近属于主动上探——三者亏损/盈利差异不只是成本结构问题，定价相对该尺寸真实分布的位置也是变量之一。</div>
+    </article>
+    <article class="chart-card">
+      <h3>新测算：Washable 9x12（$120–199.99价格带，此前3个候选未覆盖）</h3>
+      <p class="chart-note">价格矩阵真实数据：8 Parent / 月销24,305 / 中位价$155.99(P25 $125.74–P75 $169.99) / 该尺寸price_per_sqft $1.44（是8x10的1.6倍）/ 占Washable细分销量3.45%。但需注意：该价格带在"机会矩阵"里被判为<b>DOWNGRADE_OBSERVE</b>（评分54.5，MEDIUM置信度，13个Parent），不是KEEP_PRIORITY档——测算目的是看"如果做值不值"，不是说明它已经是优先档。</p>
+      <div class="detail-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="detail-stat"><span>估算净利润/件</span><b style="color:#0d756d">$38.43</b></div>
+        <div class="detail-stat"><span>估算净利率</span><b style="color:#0d756d">+24.6%</b></div>
+        <div class="detail-stat"><span>数据等级</span><b style="color:#d7772d">估算预览（Tier-C）</b></div>
+      </div>
+      <div class="table-scroll" style="margin-top:12px"><table class="opportunity-table"><thead><tr><th>输入项</th><th>数值</th><th>来源</th></tr></thead><tbody>
+        <tr><td>售价</td><td>$155.99</td><td>真实：价格矩阵9x12中位价</td></tr>
+        <tr><td>外箱尺寸</td><td>62.0×47.2×16.8cm / 10.58kg</td><td><b>估算</b>：按8x10真实包装（53.34×40.64×15.24cm/7.71kg）按面积比(108/80sqft)外推，未实测</td></tr>
+        <tr><td>1688采购成本</td><td>¥240（折$35.29）</td><td><b>估算</b>：按8x10真实1688单价的元/平米比例（约¥24/㎡×10.03㎡）外推，未拿到9x12真实报价</td></tr>
+        <tr><td>头程/FBA/佣金/TACoS/退货/Coupon</td><td>普船海派¥8.2/kg・TACoS10%・退货5.35%・Coupon5%・周转22周</td><td>真实：与ENTRY/CORE/PREMIUM同一套假设，未做场景分档（只测Base）</td></tr>
+      </tbody></table></div>
+      <div class="chart-conclusion">结论：在"包装/成本按面积比外推"的估算前提下，9x12的净利率(+24.6%)明显好于PREMIUM-8x10 Base(+5.4%)——核心原因是9x12真实price_per_sqft($1.44)比8x10($0.91)高60%，而外推成本并未同比例上升，说明<b>这个尺寸如果真实包装/采购成本验证后仍然成立，会是比现有三档更好的切入点</b>。但样本只有8个Parent、评分被打了DOWNGRADE_OBSERVE，且两层关键输入（包装、采购价）都是外推而非实测——下一步必须先拿到9x12真实1688报价和实测外箱尺寸，再决定是否升级为正式候选。</div>
+    </article>
+    <div class="note">Washable <b>Runner</b>尺寸同样值得关注：真实数据price_per_sqft $2.20，是5x7($1.14)的1.9倍，14个Parent / 月销83,447（细分内占比11.83%，仅次于5x7、8x10），但Runner实际长宽跨度很大（常见2x6到2.5x14英尺不等），无法像9x12那样用单一外箱尺寸做可靠外推，硬套一个外箱尺寸会踩到"编造包装尺寸"的红线——本轮登记为<b>数据缺口</b>，需要先拿到几个具体Runner长度段（如2.5x8/2.5x10/2.5x12）的真实1688报价和包装实测数据，才能测算利润，不在本版本给出估算数字。</div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>全链路Gate</h2><p>行业地图研究版可用，商业立项继续分阶段放行 · 2026-08-27完成外部审计与目录整改</p></div>
+    <div class="pipeline"><div class="stage done"><span class="num">01</span><strong>品类边界</strong><span>完成</span></div><div class="stage done"><span class="num">02</span><strong>数据审计</strong><span>完成</span></div><div class="stage done"><span class="num">03</span><strong>商品端</strong><span>完成</span></div><div class="stage conditional"><span class="num">04</span><strong>Keyword</strong><span>条件完成</span></div><div class="stage conditional"><span class="num">05</span><strong>VOC</strong><span>条件完成</span></div><div class="stage done"><span class="num">06</span><strong>机会漏斗</strong><span>已归档·已复核</span></div><div class="stage done"><span class="num">07</span><strong>缺口验证</strong><span>第一轮完成</span></div><div class="stage conditional"><span class="num">08</span><strong>产品定义</strong><span>DRAFT·已归档</span></div><div class="stage blocked"><span class="num">09</span><strong>利润/供应链</strong><span>正式输入阻断</span></div><div class="stage progress"><span class="num">10</span><strong>行业地图</strong><span>v0.10 合并可视化版</span></div></div>
+    <div class="note">2026-08-27外部审计整改：① 全项目正则复查batch01–19，确认仅batch14一处引用了不存在的外部路径，无新增编造证据；② 03_product_segmentation交叉核对通过；③ "机会漏斗"逻辑与ab_cell_gap_validation_v028.csv原始计算逐项核对一致；④ 06/08空目录归档问题已修复；⑤ 三档候选SKU的完整成本利润测算改用profit_scenario_results_v031.csv（onepage全口径），而非早期仅FBA的简化代理。详见decision_log.md 2026-08-27各条目。</div>
+    <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
+      <li>4个Gate已完成、4个条件完成、1个阻断——瓶颈明确集中在<b>Stage 9利润/供应链</b>这一环，前面市场、商品、机会漏斗的证据链已经足够扎实，不需要再往上游补数据，下一步资源应该投向正式FOB询价和实测包装，而不是继续扩大市场调研范围。</li>
+      <li>外部审计发现的唯一编造证据（E盘路径）已定位、降级处理、且不影响核心分析管线——四轮交叉验证（FBA/KPI/市场竞争/VOC/关键词）全部通过，说明问题是局部的，不需要对整个项目的可信度打折扣。</li>
+    </ul></div>
+  </section>
+
+  <section class="section" id="method">
+    <div class="section-head"><h2>数据来源与使用边界</h2><p>各来源保持独立口径，不直接相加</p></div>
+    <div class="source-grid"><article class="source-card"><strong>Amazon官方</strong><p>Selection Guidance、Opportunity Explorer、5个niche详情与过去360天退货信号。用于方向校准。</p></article><article class="source-card"><strong>SellerSprite</strong><p>12个月Parent Top400、完整Child、Reverse ASIN与FBA字段。销量与费用均为第三方估算。</p></article><article class="source-card"><strong>西柚 / Sorftime</strong><p>Keyword趋势、榜单、品牌、价格带和Top商品交叉验证。周期和排序保持来源原定义。</p></article><article class="source-card"><strong>Google Merchant</strong><p>12个月站外商品与品牌可见性。不能直接解释为独立站品牌份额。</p></article><article class="source-card"><strong>VOC</strong><p>83份有效报告、67,247条去重Review；只用直接回连ASIN的Review支撑细分结论。</p></article><article class="source-card"><strong>1688</strong><p>28个唯一Offer、236条尺寸SKU展示价。展示价不是正式FOB/EXW。</p></article><article class="source-card"><strong>大森林 / 燕文</strong><p>248条标准化费率参考；只有部分大森林线路适用于Amazon FBA直送情景。</p></article><article class="source-card"><strong>FBA利润测算台</strong><p>官方2026-01-15生效Size Tier/配送费/仓储/入库配置费率，按包装尺寸自动反推外箱装箱数；未单列进口关税。<a href="https://lyg15911055415-cyber.github.io/fba-calculator/" target="_blank" rel="noopener" style="color:var(--teal)">lyg15911055415-cyber.github.io/fba-calculator</a></p></article></div>
+    <article class="panel" style="margin-top:16px"><div class="card-title"><div><h3>假设与限制</h3><p>阅读行业地图时必须同时保留</p></div></div><ul class="assumption-list">
+      <li>SellerSprite、Sorftime、西柚销量不与Amazon官方或Google Merchant相加。</li>
+      <li>Parent代表Child价格不等于全部变体均价；尺寸价格优先看price_per_sqft。</li>
+      <li>Keyword搜索量用于需求表达，不作为Amazon全市场规模。</li>
+      <li>VOC主题率、负评率和Amazon官方退货率分母不同，不直接比较或合并。</li>
+      <li>Handmade/Wool仅49条映射Review，VOC结论保持低置信度。</li>
+      <li>VOC Rank2与Rank88缺失，保持缺失而不是填0。</li>
+      <li>利润模型的Coupon/TACoS/退货率均为场景假设，非目标SKU实测值；1688为展示价非议价FOB；当前使用的FBA计算台未单列进口关税，实际清关成本可能使净利率进一步下降。</li>
+      <li>合规、认证、专利、版权和TRO未完成，产品立项不得放行。</li>
+      <li>2026-08-27外部审计：曾引用的外部路径 E:\临时下载文件 现场核实不存在，相关"新发现VOC PDF"结论已否决；batch14西柚榜单的"E盘原件已核对"这一溯源声明降级为未验证（文件本身仍在raw、内容未被否定）。</li>
+    </ul></article>
+    <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
+      <li>这份行业地图的证据等级分层清晰：<b>A级</b>（Amazon官方数据、SellerSprite/西柚交叉验证一致的部分）可以直接支撑机会排序；<b>C/D级</b>（1688展示价、成本假设、独立站GMC样本）只能用于方向判断和场景测算，不能作为最终定价或立项依据——读者引用结论时应该先看这条数字来自哪一级证据，不是所有数字都同等可信。</li>
+      <li>最需要优先补齐的不是新增市场调研，而是三份具体文件：目标SKU的正式FOB报价单、实测包装尺寸重量、Seller Central官方FBA费率预览——这三份文件到位后，本文档里所有BLOCKED_FORMAL_INPUTS标记可以在不重做市场分析的前提下直接更新为正式结论。</li>
+    </ul></div>
+  </section>
+  <footer class="footer"><strong>Amazon US Area Rugs Industry Map v0.10 · 合并可视化版</strong><span>数据冻结：2026-08-27 · 原始数据未修改 · 已通过四轮外部审计+全量路径复查</span></footer>
+</main>
+<script>
+const fmt=n=>new Intl.NumberFormat('en-US').format(n);
+function setupCanvas(c){const dpr=window.devicePixelRatio||1,rect=c.getBoundingClientRect();c.width=rect.width*dpr;c.height=rect.height*dpr;const ctx=c.getContext('2d');ctx.scale(dpr,dpr);return{ctx,w:rect.width,h:rect.height};}
+
+function hBar(id, items, opts={}){
+  const c=document.getElementById(id); if(!c)return; const {ctx,w,h}=setupCanvas(c); ctx.clearRect(0,0,w,h);
+  const max=opts.max||Math.max(...items.map(i=>Math.abs(i.value)))*1.18;
+  const padL=opts.padL||118, padR=64, top=6, rowH=(h-10)/items.length;
+  ctx.font='10.5px Segoe UI';
+  items.forEach((it,i)=>{
+    const y=top+i*rowH, barH=rowH*0.56;
+    const barW=(w-padL-padR)*Math.max(it.value,0)/max;
+    ctx.fillStyle='#ebe8df'; ctx.fillRect(padL,y+rowH*0.22,w-padL-padR,barH);
+    ctx.fillStyle=it.color||'#0d756d'; ctx.fillRect(padL,y+rowH*0.22,barW,barH);
+    ctx.fillStyle='#102a2d'; ctx.textAlign='right'; ctx.fillText(it.label,padL-9,y+rowH*0.58);
+    ctx.textAlign='left'; ctx.fillText(opts.valueFmt?opts.valueFmt(it.value):it.value, padL+barW+7, y+rowH*0.58);
+  });
+}
+
+function dualHBar(id, items, opts={}){
+  const c=document.getElementById(id); if(!c)return; const {ctx,w,h}=setupCanvas(c); ctx.clearRect(0,0,w,h);
+  const padL=opts.padL||150, padR=60, top=6, rowH=(h-10)/items.length;
+  const max=opts.max||Math.max(...items.map(i=>Math.max(i.a,i.b)))*1.15;
+  ctx.font='10.5px Segoe UI';
+  items.forEach((it,i)=>{
+    const y=top+i*rowH, barH=rowH*0.34;
+    const aW=(w-padL-padR)*it.a/max, bW=(w-padL-padR)*it.b/max;
+    ctx.fillStyle='#0d756d'; ctx.fillRect(padL,y+rowH*0.06,aW,barH);
+    ctx.fillStyle='#173b55'; ctx.fillRect(padL,y+rowH*0.50,bW,barH);
+    ctx.fillStyle='#102a2d'; ctx.textAlign='right'; ctx.fillText(it.label,padL-9,y+rowH*0.58);
+    ctx.fillStyle='#0d756d'; ctx.textAlign='left'; ctx.fillText('$'+it.a.toFixed(0),padL+aW+6,y+rowH*0.28);
+    ctx.fillStyle='#173b55'; ctx.fillText('$'+it.b.toFixed(0),padL+bW+6,y+rowH*0.72);
+  });
+}
+
+function segBarChart(id, segs){
+  const c=document.getElementById(id); const {ctx,w,h}=setupCanvas(c); ctx.clearRect(0,0,w,h);
+  const padL=118,padR=52,top=6,rowH=(h-10)/segs.length;
+  ctx.font='10.5px Segoe UI';
+  segs.forEach((s,i)=>{
+    const y=top+i*rowH, barH=rowH*0.42;
+    const shareW=(w-padL-padR)*s.share/60;
+    ctx.fillStyle='#ebe8df'; ctx.fillRect(padL,y+rowH*0.08,w-padL-padR,barH);
+    ctx.fillStyle='#0d756d'; ctx.fillRect(padL,y+rowH*0.08,shareW,barH);
+    const negW=(w-padL-padR)*s.negative/60;
+    ctx.fillStyle='#f8e2da'; ctx.fillRect(padL,y+rowH*0.54,w-padL-padR,barH);
+    ctx.fillStyle='#b34a3c'; ctx.fillRect(padL,y+rowH*0.54,negW,barH);
+    ctx.fillStyle='#102a2d'; ctx.textAlign='right'; ctx.fillText(s.label,padL-9,y+rowH*0.58);
+    ctx.textAlign='left'; ctx.fillStyle='#0d756d'; ctx.fillText(s.share.toFixed(1)+'%',padL+shareW+6,y+rowH*0.32);
+    ctx.fillStyle='#b34a3c'; ctx.fillText(s.negative.toFixed(1)+'%',padL+negW+6,y+rowH*0.78);
+  });
+}
+
+function scatterChart(id, points, opts={}){
+  const c=document.getElementById(id); const {ctx,w,h}=setupCanvas(c); ctx.clearRect(0,0,w,h);
+  const padL=36,padB=28,padT=10,padR=14;
+  const xs=points.map(p=>p.x), ys=points.map(p=>p.y);
+  const xMin=opts.xMin??Math.min(...xs), xMax=opts.xMax??Math.max(...xs);
+  const yMin=opts.yMin??Math.min(...ys)*0.9, yMax=opts.yMax??Math.max(...ys)*1.1;
+  const X=v=>padL+(v-xMin)/(xMax-xMin)*(w-padL-padR);
+  const Y=v=>h-padB-(v-yMin)/(yMax-yMin)*(h-padT-padB);
+  ctx.strokeStyle='#dcded7'; ctx.lineWidth=1; ctx.font='9.5px Segoe UI'; ctx.fillStyle='#718183';
+  for(let i=0;i<=3;i++){const v=yMin+(yMax-yMin)*i/3; const y=Y(v); ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(w-padR,y);ctx.stroke(); ctx.textAlign='right'; ctx.fillText(v.toFixed(0),padL-5,y+3);}
+  const zeroX=X(0); if(zeroX>=padL&&zeroX<=w-padR){ctx.strokeStyle='#b9b6a8'; ctx.beginPath(); ctx.moveTo(zeroX,padT); ctx.lineTo(zeroX,h-padB); ctx.stroke();}
+  points.forEach(p=>{
+    const r=opts.rFn?opts.rFn(p):6;
+    ctx.beginPath(); ctx.arc(X(p.x),Y(p.y),r,0,Math.PI*2); ctx.fillStyle=p.color; ctx.globalAlpha=.88; ctx.fill(); ctx.globalAlpha=1;
+    ctx.fillStyle='#102a2d'; ctx.font='9.5px Segoe UI'; ctx.textAlign='center'; ctx.fillText(p.label, X(p.x), Y(p.y)-r-4);
+  });
+  ctx.fillStyle='#627477'; ctx.font='10px Segoe UI'; ctx.textAlign='center'; ctx.fillText(opts.xLabel||'', w/2, h-6);
+}
+
+function heatmapChart(id, rows, opts={}){
+  const c=document.getElementById(id); const {ctx,w,h}=setupCanvas(c); ctx.clearRect(0,0,w,h);
+  const padL=150, padT=8; const allCols=opts.cols; const cw=(w-padL-10)/allCols.length; const rh=(h-padT-6)/rows.length;
+  const max=opts.max;
+  ctx.font='10px Segoe UI'; ctx.fillStyle='#627477'; ctx.textAlign='center';
+  allCols.forEach((col,ci)=>ctx.fillText(col, padL+ci*cw+cw/2, padT+10));
+  rows.forEach((row,ri)=>{
+    ctx.fillStyle='#102a2d'; ctx.textAlign='right'; ctx.font='11.5px Segoe UI';
+    ctx.fillText(row.label, padL-10, padT+18+ri*rh+rh/2+4);
+    allCols.forEach((col,ci)=>{
+      const val=row.values[ci];
+      const x=padL+ci*cw, y=padT+18+ri*rh;
+      if(val==null){ctx.fillStyle='#eceae2'; ctx.fillRect(x+2,y+2,cw-4,rh-4); return;}
+      const t=Math.max(0,Math.min(1,val/max));
+      ctx.fillStyle=`rgba(13,117,109,${0.12+t*0.78})`;
+      ctx.fillRect(x+2,y+2,cw-4,rh-4);
+      ctx.fillStyle= t>0.55 ? '#fffdf8':'#102a2d'; ctx.font='12px Georgia'; ctx.textAlign='center';
+      ctx.fillText(val.toFixed(1), x+cw/2, y+rh/2+4);
+    });
+  });
+}
+
+function waterfallChart(id, steps){
+  const c=document.getElementById(id); const {ctx,w,h}=setupCanvas(c); ctx.clearRect(0,0,w,h);
+  const top=12,bottom=40,left=4,right=4;
+  let running=0; const vals=steps.map(s=>{ if(s.type==='total'){return{...s,from:0,to:s.value}} const from=running; running+=s.value; return{...s,from,to:running};});
+  const tops=vals.map(v=>Math.max(v.from,v.to)), bots=vals.map(v=>Math.min(v.from,v.to));
+  const maxV=Math.max(...tops,0), minV=Math.min(...bots,0); const range=(maxV-minV)||1;
+  const yOf=v=>h-bottom-((v-minV)/range)*(h-top-bottom);
+  const y0=yOf(0); const bw=(w-left-right)/steps.length;
+  ctx.strokeStyle='#d9d6ca'; ctx.beginPath(); ctx.moveTo(left,y0); ctx.lineTo(w-right,y0); ctx.stroke();
+  vals.forEach((v,i)=>{
+    const x=left+i*bw+bw*0.14, bwid=bw*0.72;
+    const yFrom=yOf(v.from), yTo=yOf(v.to);
+    const yTop=Math.min(yFrom,yTo), hgt=Math.max(Math.abs(yTo-yFrom),2);
+    const color = v.type==='total' ? (v.value>=0?'#0d756d':'#b34a3c') : (v.value>=0?'#a9d3c7':'#f0b7a8');
+    ctx.fillStyle=color; ctx.fillRect(x,yTop,bwid,hgt);
+    ctx.fillStyle='#627477'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+    ctx.save(); ctx.translate(x+bwid/2, h-bottom+11); ctx.rotate(-0.5); ctx.textAlign='right'; ctx.fillText(v.label,0,0); ctx.restore();
+    ctx.fillStyle='#102a2d'; ctx.font=(v.type==='total'?'11px Georgia':'9px Segoe UI'); ctx.textAlign='center';
+    const lblY = v.value>=0 ? yTop-5 : yTop+hgt+11;
+    ctx.fillText((v.value>=0?'+':'-')+'$'+Math.abs(v.value).toFixed(v.type==='total'?2:1), x+bwid/2, lblY);
+  });
+}
+
+function groupedBar(id, categories, series, opts={}){
+  const c=document.getElementById(id); const {ctx,w,h}=setupCanvas(c); ctx.clearRect(0,0,w,h);
+  const padL=42,padB=52,padT=10,padR=10;
+  const allVals=series.flatMap(s=>s.values);
+  const max=Math.max(...allVals)*1.15, min=Math.min(0,...allVals)*1.2;
+  const zero=h-padB-(0-min)/(max-min)*(h-padT-padB);
+  const groupW=(w-padL-padR)/categories.length; const barW=groupW/(series.length+0.6);
+  ctx.strokeStyle='#dcded7'; ctx.beginPath(); ctx.moveTo(padL,zero); ctx.lineTo(w-padR,zero); ctx.stroke();
+  for(let i=0;i<=4;i++){const v=min+(max-min)*i/4; const y=h-padB-(v-min)/(max-min)*(h-padT-padB); ctx.strokeStyle='#ece9e0';ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(w-padR,y);ctx.stroke(); ctx.fillStyle='#8a9999'; ctx.font='9px Segoe UI'; ctx.textAlign='right'; ctx.fillText((v*100).toFixed(0)+'%', padL-5, y+3);}
+  categories.forEach((cat,ci)=>{
+    series.forEach((s,si)=>{
+      const v=s.values[ci];
+      const y0=zero, y1=h-padB-(v-min)/(max-min)*(h-padT-padB);
+      const x=padL+ci*groupW+si*barW+barW*0.12;
+      ctx.fillStyle=s.color; const top=Math.min(y0,y1), hgt=Math.max(Math.abs(y1-y0),1);
+      ctx.fillRect(x,top,barW*0.76,hgt);
+    });
+    ctx.fillStyle='#627477'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText(cat, padL+ci*groupW+groupW/2, h-padB+16);
+  });
+}
+
+const segments=[
+  {code:'WASHABLE_PRINTED_LOW_PILE',label:'可机洗印花低绒',parents:190,sales:723178,share:58.52,delta:9.45,price:59.99,ppsf:1.14,reviews:21536,negative:18.1,confidence:'high',brands:[['RELEANY',10.5],['PureCozy',5.6],['Soalmost',4.6],['cotiled',4.1],['WondRg',3.9]],pains:[['THIN_PADDING',17.3],['COLOR_MISMATCH_FADE',17.0],['CREASE_CURL_FLATNESS',13.7],['VACUUM_CLEANING',11.1],['DURABILITY_UNRAVEL',10.3]],drivers:[['SOFT_COMFORT',36.5],['COLOR_DESIGN',34.6],['QUALITY_DURABLE',17.5],['WASHABLE_EASY_CLEAN',17.1]]},
+  {code:'SHAG_PLUSH',label:'高绒 / 毛绒',parents:96,sales:337157,share:27.28,delta:-6.15,price:25.49,ppsf:.95,reviews:9112,negative:31.5,confidence:'high',brands:[['yulidayang',14.5],['PureCozy',10.3],['OLANLY',9.4],['ONASAR',4.8],['Boshengya',4.6]],pains:[['THIN_PADDING',15.3],['SHEDDING_FIBER',9.0],['SLIP_BACKING',7.7],['COLOR_MISMATCH_FADE',7.0],['DURABILITY_UNRAVEL',6.8]],drivers:[['SOFT_COMFORT',43.2],['COLOR_DESIGN',16.4],['QUALITY_DURABLE',14.4],['VALUE_PRICE',14.2]]},
+  {code:'OUTDOOR_PERFORMANCE',label:'室内外耐候',parents:19,sales:85551,share:6.92,delta:1.83,price:68.41,ppsf:2.29,reviews:1141,negative:22.3,confidence:'high',brands:[['CAMILSON',65.3],['EARTHALL',9.7],['JONATHAN Y',7.2],['Lahome',4.7],['WondRg',3.8]],pains:[['COLOR_MISMATCH_FADE',24.4],['DURABILITY_UNRAVEL',16.9],['CREASE_CURL_FLATNESS',13.4],['THIN_PADDING',10.2],['OUTDOOR_WATER_MILDEW',9.4]],drivers:[['QUALITY_DURABLE',30.6],['COLOR_DESIGN',29.8],['VALUE_PRICE',11.4],['WASHABLE_EASY_CLEAN',10.5]]},
+  {code:'MACHINE_MADE_MODERN',label:'一般机制现代',parents:19,sales:43578,share:3.53,delta:-3.22,price:75.20,ppsf:1.96,reviews:7963,negative:18.5,confidence:'high',brands:[['Loloi',28.3],['SAFAVIEH',14.5],['Lofus',7.5],['ORINOVA',7.1],['Rugcomf',6.6]],pains:[['THIN_PADDING',18.3],['CREASE_CURL_FLATNESS',16.7],['COLOR_MISMATCH_FADE',11.9],['DURABILITY_UNRAVEL',9.5],['VACUUM_CLEANING',8.3]],drivers:[['SOFT_COMFORT',38.2],['COLOR_DESIGN',31.0],['QUALITY_DURABLE',17.9],['VALUE_PRICE',15.7]]},
+  {code:'NATURAL_FIBER_WOVEN',label:'天然纤维编织',parents:11,sales:28802,share:2.33,delta:-.82,price:85.99,ppsf:1.92,reviews:710,negative:22.1,confidence:'medium',brands:[['Tortania',28.4],['SAFAVIEH',28.3],['Rugcomf',14.6],['Hausattire',13.8],['Nourison',8.0]],pains:[['DURABILITY_UNRAVEL',19.1],['CREASE_CURL_FLATNESS',15.3],['TRIP_HAZARD',8.9],['COLOR_MISMATCH_FADE',8.3],['THIN_PADDING',7.6]],drivers:[['QUALITY_DURABLE',29.3],['COLOR_DESIGN',26.2],['SOFT_COMFORT',13.6],['VALUE_PRICE',10.1]]},
+  {code:'MACHINE_WOVEN_TRADITIONAL',label:'机织传统 / 东方风格',parents:4,sales:10744,share:.87,delta:-.22,price:158.62,ppsf:2.46,reviews:652,negative:14.9,confidence:'medium',brands:[['Loloi',69.6],['JONATHAN Y',16.1],['SAFAVIEH',14.3]],pains:[['THIN_PADDING',19.6],['COLOR_MISMATCH_FADE',17.5],['CREASE_CURL_FLATNESS',16.5],['SLIP_BACKING',15.5],['VACUUM_CLEANING',15.5]],drivers:[['SOFT_COMFORT',41.8],['COLOR_DESIGN',35.1],['WASHABLE_EASY_CLEAN',23.8],['QUALITY_DURABLE',19.5]]},
+  {code:'HANDMADE_WOOL',label:'手工 / 羊毛高端',parents:3,sales:6762,share:.55,delta:-.87,price:55.33,ppsf:1.67,reviews:49,negative:14.3,confidence:'low',brands:[['FALARK',36.9],['Loloi',36.1],['SAFAVIEH',27.0]],pains:[['SLIP_BACKING',28.6],['DURABILITY_UNRAVEL',28.6],['CREASE_CURL_FLATNESS',14.3],['THIN_PADDING',14.3]],drivers:[['COLOR_DESIGN',50.0],['SOFT_COMFORT',40.5],['WASHABLE_EASY_CLEAN',19.0],['QUALITY_DURABLE',14.3]]}
+];
+const painLabels={THIN_PADDING:'过薄 / 缺少缓冲',COLOR_MISMATCH_FADE:'色差 / 褪色',CREASE_CURL_FLATNESS:'折痕 / 卷边 / 不平整',VACUUM_CLEANING:'吸尘 / 日常清洁困难',DURABILITY_UNRAVEL:'开线 / 耐用性',SHEDDING_FIBER:'掉毛 / 纤维脱落',SLIP_BACKING:'打滑 / 背衬失效',OUTDOOR_WATER_MILDEW:'积水 / 霉变',TRIP_HAZARD:'绊倒风险'};
+const driverLabels={SOFT_COMFORT:'柔软舒适',COLOR_DESIGN:'颜色 / 图案 / 颜值',QUALITY_DURABLE:'质量 / 耐用',WASHABLE_EASY_CLEAN:'可机洗 / 易清洁',VALUE_PRICE:'价格 / 性价比'};
+
+document.getElementById('donutLegend').innerHTML = [['#0d756d','可机洗印花低绒','58.5%'],['#d7772d','高绒 / 毛绒','27.3%'],['#4f91a7','室内外耐候','6.9%'],['#8a78a8','一般机制现代','3.5%'],['#b19859','天然纤维编织','2.3%']].map(x=>`<div class="legend-row"><i class="dot" style="background:${x[0]}"></i><span>${x[1]}</span><b>${x[2]}</b></div>`).join('');
+
+segBarChart('segBar', segments.map(s=>({label:s.label,share:s.share,negative:s.negative})));
+scatterChart('segScatter', segments.map(s=>({x:s.delta,y:s.negative,label:s.label,color:s.delta>=0?'#0d756d':'#b34a3c'})), {xLabel:'12个月份额变化 (pp) →',xMin:-8,xMax:11,yMin:10,yMax:34, rFn:p=>6});
+
+const periods=['25-08','25-09','25-10','25-11','25-12','26-01','26-02','26-03','26-04','26-05','26-06','26-07'];
+const trend={WASHABLE_PRINTED_LOW_PILE:[49.07,52.61,54.75,54.16,38.56,51.77,47.78,64.39,57.35,60.77,66.35,58.52],SHAG_PLUSH:[33.43,27.31,24.99,32.03,47.12,32.92,35.91,22.45,25.31,21.58,18.13,27.28],OUTDOOR_PERFORMANCE:[5.09,5.20,5.11,2.35,1.76,2.24,3.64,4.33,5.94,6.85,7.70,6.92]};
+function drawTrend(){const c=document.getElementById('trendChart');const {ctx,w,h}=setupCanvas(c);const p={l:38,r:12,t:14,b:32};ctx.clearRect(0,0,w,h);ctx.font='10px Segoe UI';ctx.fillStyle='#718183';ctx.strokeStyle='#dcded7';ctx.lineWidth=1;[0,20,40,60,80].forEach(v=>{const y=p.t+(80-v)*(h-p.t-p.b)/80;ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();ctx.fillText(v+'%',5,y+3)});periods.forEach((m,i)=>{if(i%2===0||i===periods.length-1){const x=p.l+i*(w-p.l-p.r)/(periods.length-1);ctx.fillText(m,x-12,h-10)}});[['WASHABLE_PRINTED_LOW_PILE','#0d756d'],['SHAG_PLUSH','#d7772d'],['OUTDOOR_PERFORMANCE','#4f91a7']].forEach(([key,color])=>{ctx.strokeStyle=color;ctx.lineWidth=3;ctx.beginPath();trend[key].forEach((v,i)=>{const x=p.l+i*(w-p.l-p.r)/(periods.length-1),y=p.t+(80-v)*(h-p.t-p.b)/80;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();trend[key].forEach((v,i)=>{const x=p.l+i*(w-p.l-p.r)/(periods.length-1),y=p.t+(80-v)*(h-p.t-p.b)/80;ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill()})});}
+
+let activeSegment=segments[0];
+function renderSegmentTabs(){const host=document.getElementById('segmentTabs');host.innerHTML=segments.map((s,i)=>`<button class="segment-tab ${i===0?'active':''}" data-code="${s.code}"><strong>${s.label}</strong><small>${s.share.toFixed(1)}% · ${s.parents} Parent</small></button>`).join('');host.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{host.querySelector('.active')?.classList.remove('active');b.classList.add('active');activeSegment=segments.find(s=>s.code===b.dataset.code);renderSegmentDetail();}));}
+function renderSegmentDetail(){const s=activeSegment;document.getElementById('segmentDetail').innerHTML=`<div class="card-title"><div><h3>${s.label}</h3><p>${s.code} · ${s.confidence.toUpperCase()} VOC confidence</p></div></div><div class="detail-grid"><div class="detail-stat"><span>核心销量结构</span><b>${s.share.toFixed(1)}%</b></div><div class="detail-stat"><span>12个月变化</span><b style="color:${s.delta>=0?'#0d756d':'#b34a3c'}">${s.delta>=0?'+':''}${s.delta.toFixed(1)}pp</b></div><div class="detail-stat"><span>中位售价</span><b>$${s.price.toFixed(2)}</b></div><div class="detail-stat"><span>Review负评率</span><b>${s.negative.toFixed(1)}%</b></div></div><div class="chart-box" style="height:120px;margin-bottom:16px"><canvas id="brandBarChart"></canvas></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><h4 style="font-size:11px;margin:0 0 10px;color:var(--muted)">负评痛点Top</h4><div class="tag-list">${s.pains.map(x=>`<span class="tag risk">${painLabels[x[0]]||x[0]} · ${x[1]}%</span>`).join('')}</div></div><div><h4 style="font-size:11px;margin:0 0 10px;color:var(--muted)">购买驱动Top</h4><div class="tag-list">${s.drivers.map(x=>`<span class="tag good">${driverLabels[x[0]]||x[0]} · ${x[1]}%</span>`).join('')}</div></div></div>`;
+  hBar('brandBarChart', s.brands.map(b=>({label:b[0],value:b[1]})), {max:Math.max(...s.brands.map(b=>b[1]))*1.3, padL:82, valueFmt:v=>v.toFixed(1)+'%'});}
+renderSegmentTabs(); renderSegmentDetail(); drawTrend();
+
+const sizeCols=['2x3','3x5','4x6','5x7','5x8','6x9','8x10','9x12','10x14','Runner','Round','Other'];
+const priceSizeData=[
+  {seg:'WASHABLE_PRINTED_LOW_PILE',label:'可机洗印花低绒',rows:[
+    ['2x3',6,34275,21.71,20.9125,23.4525,3.6183,0.0486],['3x5',3,6838,35.99,27.49,39.99,2.3993,0.0097],['4x6',7,17380,21.36,20.755,30.24,0.8900,0.0246],
+    ['5x7',47,210304,39.99,33.365,52.99,1.1426,0.2983],['5x8',2,8201,51.45,40.68,62.22,1.2863,0.0116],['6x9',9,31354,69.99,39.0,79.99,1.2961,0.0445],
+    ['8x10',77,266070,72.89,64.79,94.49,0.9111,0.3774],['9x12',8,24305,155.99,125.74,169.99,1.4444,0.0345],['10x14',3,12424,170.99,160.49,190.49,1.2214,0.0176],
+    ['Runner',14,83447,37.70,32.99,51.99,2.1959,0.1183],['Round',1,1442,61.99,61.99,61.99,2.1925,0.0020],['Other',5,9049,69.99,59.99,79.99,2.3996,0.0128]
+  ]},
+  {seg:'SHAG_PLUSH',label:'高绒 / 毛绒',rows:[
+    ['2x3',7,14942,9.99,9.135,19.54,1.6650,0.0479],['3x5',6,21220,17.54,17.015,17.99,1.1693,0.0681],['4x6',22,99886,18.99,18.465,21.99,0.7913,0.3204],
+    ['5x7',9,23989,31.49,21.37,39.32,0.8997,0.0770],['5x8',8,25305,32.965,25.24,35.99,0.8241,0.0812],['6x9',10,31363,48.99,37.74,65.9125,0.9072,0.1006],
+    ['8x10',13,52630,45.99,44.99,79.99,0.5749,0.1688],['9x12',1,4191,125.99,125.99,125.99,1.1666,0.0134],['10x14',1,2374,199.99,199.99,199.99,1.4285,0.0076],
+    ['Runner',5,12061,23.72,14.97,26.24,1.9043,0.0387],['Round',1,1586,99.00,99.00,99.00,7.8784,0.0051],['Other',7,22188,24.99,16.21,54.895,1.2427,0.0712]
+  ]},
+  {seg:'OUTDOOR_PERFORMANCE',label:'室内外耐候',rows:[
+    ['2x3',3,17093,39.90,39.90,39.90,6.6500,0.2302],['3x5',2,5959,40.895,39.3425,42.4475,2.4025,0.0802],['4x6',2,6810,57.57,53.78,61.36,2.3988,0.0917],
+    ['5x7',2,10957,89.90,89.90,89.90,2.5686,0.1476],['8x10',5,21532,152.99,117.0,179.9,1.9124,0.2900],['9x12',1,1945,218.75,218.75,218.75,2.0255,0.0262],
+    ['Round',1,1639,68.41,68.41,68.41,3.4841,0.0221],['Runner',1,8321,99.99,99.99,99.99,1.8517,0.1121]
+  ]},
+  {seg:'MACHINE_MADE_MODERN',label:'一般机制现代',rows:[
+    ['2x3',2,4707,23.015,21.0025,25.0275,3.1848,0.1157],['4x6',2,3309,36.255,32.8875,39.6225,1.5558,0.0813],['5x7',3,6834,26.99,26.425,43.49,0.7711,0.1680],
+    ['6x9',1,2375,109.99,109.99,109.99,2.0369,0.0584],['8x10',4,9096,132.46,110.1875,170.6925,1.6801,0.2235],['Other',3,5407,156.12,126.805,298.495,2.0310,0.1329],
+    ['Runner',3,8961,75.20,54.595,95.025,3.8813,0.2202]
+  ]},
+  {seg:'NATURAL_FIBER_WOVEN',label:'天然纤维编织',rows:[
+    ['2x3',1,2091,26.24,26.24,26.24,4.3733,0.0843],['3x5',1,1986,36.99,36.99,36.99,2.4660,0.0800],['5x7',2,5028,34.965,28.5275,41.4025,0.9990,0.2026],
+    ['8x10',3,8521,250.00,161.12,265.5,3.1250,0.3434],['9x12',3,7191,119.99,109.99,235.825,1.1110,0.2898]
+  ]},
+  {seg:'MACHINE_WOVEN_TRADITIONAL',label:'机织传统 / 东方风格',rows:[
+    ['5x7',1,4386,87.46,87.46,87.46,2.3323,0.4082],['8x10',3,6358,207.23,158.615,220.33,2.5904,0.5918]
+  ]},
+  {seg:'HANDMADE_WOOL',label:'手工 / 羊毛高端',rows:[
+    ['4x6',1,2492,22.67,22.67,22.67,0.9446,0.3685],['8x10',1,2442,130.87,130.87,130.87,1.6707,0.3611],['Other',1,1828,55.33,55.33,55.33,6.1478,0.2703]
+  ]}
+];
+function renderPriceSizeMatrix(){
+  const rowsPrice=priceSizeData.map(s=>({label:s.label, values:sizeCols.map(c=>{const r=s.rows.find(x=>x[0]===c); return r?r[3]:null;})}));
+  const rowsPpsf=priceSizeData.map(s=>({label:s.label, values:sizeCols.map(c=>{const r=s.rows.find(x=>x[0]===c); return r?r[6]:null;})}));
+  heatmapChart('priceHeatmap', rowsPrice, {cols:sizeCols, max:270});
+  heatmapChart('ppsfHeatmap', rowsPpsf, {cols:sizeCols, max:8});
+  const tableRows=[];
+  priceSizeData.forEach(s=>{
+    s.rows.forEach((r,i)=>{
+      tableRows.push(`<tr>${i===0?`<td rowspan="${s.rows.length}" style="font-weight:700;vertical-align:top;border-right:1px solid var(--line)">${s.label}</td>`:''}<td>${r[0]}</td><td>${r[1]}</td><td>${fmt(r[2])}</td><td>$${r[3].toFixed(2)}</td><td style="font-size:10.5px;color:var(--muted)">$${r[4].toFixed(2)}–$${r[5].toFixed(2)}</td><td>$${r[6].toFixed(2)}</td><td>${(r[7]*100).toFixed(1)}%</td></tr>`);
+    });
+  });
+  document.getElementById('priceSizeTable').innerHTML = tableRows.join('');
+}
+renderPriceSizeMatrix();
+
+const crossChannelBrands=[
+  {label:'PureCozy (Washable)',a:116.99,b:100.00},
+  {label:'PureCozy (Shag)',a:16.31,b:100.00},
+  {label:'Jonathan Y (Outdoor)',a:92.71,b:98.00},
+  {label:'Jonathan Y (Mach.Modern)',a:120.92,b:98.00},
+  {label:'Lahome (Outdoor)',a:37.79,b:173.25},
+  {label:'Lahome (Mach.Modern)',a:109.99,b:173.25},
+  {label:'nuLOOM (Outdoor)',a:152.99,b:214.25},
+  {label:'Loloi (Mach.Modern)',a:75.20,b:242.50},
+  {label:'SAFAVIEH (Mach.Modern)',a:144.00,b:175.25},
+  {label:'SAFAVIEH (Nat.Fiber)',a:265.50,b:175.25}
+];
+dualHBar('crossChannelBar', crossChannelBrands, {max:290, padL:170});
+
+const brandMatrix={
+  WASHABLE_PRINTED_LOW_PILE:{label:'可机洗印花低绒',rows:[
+    {brand:'RELEANY',asin:'B0CS66SMR7',parents:3,sales:75938,price:39.99,sizes:'Runner; 5x7',band:'$50-79.99',channel:'AMAZON_ONLY',entry:'走廊/厨房过道小尺寸机洗防滑走量款'},
+    {brand:'PureCozy',asin:'B0CPHR2RC8',parents:13,sales:40786,price:116.99,sizes:'8x10; 6x9; Runner; 9x12',band:'$120-199.99',channel:'CROSS_CHANNEL',entry:'大尺寸客厅复古风机洗，独立站+Amazon双线经营'},
+    {brand:'Soalmost',asin:'B0CYT76ZVY',parents:4,sales:33508,price:67.49,sizes:'8x10; 5x7',band:'$80-119.99',channel:'AMAZON_ONLY',entry:'客厅卧室复古中大尺寸中价位'},
+    {brand:'cotiled',asin:'B0GD6KTSWM',parents:6,sales:29383,price:31.45,sizes:'5x7; 5x8; 4x6; 8x10',band:'<$30',channel:'AMAZON_ONLY',entry:'多尺寸覆盖入门低价走量'},
+    {brand:'WondRg',asin:'B0DJ22J2CT',parents:9,sales:28312,price:104.99,sizes:'8x10; Other',band:'$80-119.99',channel:'AMAZON_ONLY',entry:'大尺寸中高价客厅卧室'}
+  ]},
+  SHAG_PLUSH:{label:'高绒 / 毛绒',rows:[
+    {brand:'yulidayang',asin:'B0CQHCRS2R',parents:13,sales:48768,price:35.99,sizes:'3x5; 5x8; 6x9',band:'$30-49.99',channel:'AMAZON_ONLY',entry:'中小尺寸宠物友好走量'},
+    {brand:'PureCozy',asin:'B0H9SJJJGC',parents:8,sales:34666,price:16.31,sizes:'5x8; 6x9; 8x10; 4x6',band:'<$30',channel:'CROSS_CHANNEL',entry:'同品牌跨Shag做低价引流款，独立站承接高价款'},
+    {brand:'OLANLY',asin:'B0D9GD36WG',parents:1,sales:31674,price:12.98,sizes:'4x6',band:'<$30',channel:'AMAZON_ONLY',entry:'极致低价+超高评论量(11006条)冲量款'},
+    {brand:'ONASAR',asin:'B0CBVK5BQV',parents:6,sales:16218,price:68.49,sizes:'6x9; Other; 5x7',band:'$50-79.99',channel:'AMAZON_ONLY',entry:'中高价但评分仅3.9，存在体验缺口'},
+    {brand:'Boshengya',asin:'B0CYQDVZ7X',parents:8,sales:15662,price:46.49,sizes:'4x6; 8x10; 10x14; 6x9',band:'<$30',channel:'AMAZON_ONLY',entry:'全尺寸覆盖中低价'}
+  ]},
+  OUTDOOR_PERFORMANCE:{label:'室内外耐候',rows:[
+    {brand:'CAMILSON',asin:'B0G4TJ89LZ',parents:10,sales:55892,price:57.53,sizes:'2x3; 8x10; 5x7',band:'$30-49.99',channel:'AMAZON_ONLY',entry:'户外庭院多尺寸中低价走量款'},
+    {brand:'EARTHALL',asin:'B0FNN5DVQ7',parents:1,sales:8321,price:99.99,sizes:'Runner',band:'$80-119.99',channel:'AMAZON_ONLY',entry:'户外走廊Runner中高价单尺寸'},
+    {brand:'JONATHAN Y',asin:'B0BN21GL29',parents:2,sales:6173,price:92.71,sizes:'8x10; Round',band:'$80-119.99',channel:'CROSS_CHANNEL',entry:'圆形+现代抽象户外中高价，独立站同步'},
+    {brand:'Lahome',asin:'B0CXSGTRBT',parents:1,sales:4022,price:37.79,sizes:'3x5',band:'$30-49.99',channel:'CROSS_CHANNEL',entry:'入户门厅户外小尺寸机洗，独立站定价显著更高'},
+    {brand:'WondRg',asin:'B0H9YCNLJ1',parents:1,sales:3235,price:109.99,sizes:'8x10',band:'$80-119.99',channel:'AMAZON_ONLY',entry:'大尺寸中高价跨室内外场景'}
+  ]},
+  MACHINE_MADE_MODERN:{label:'一般机制现代',rows:[
+    {brand:'Loloi',asin:'B0H2LM3GLL',parents:5,sales:12314,price:75.20,sizes:'Runner; 8x10; 2x3',band:'$80-119.99',channel:'CROSS_CHANNEL',entry:'全尺寸覆盖中高价头部品牌，独立站同步高价定位'},
+    {brand:'SAFAVIEH',asin:'B0DP7S9Z7J',parents:3,sales:6311,price:144.00,sizes:'Other; 8x10',band:'$120-199.99',channel:'CROSS_CHANNEL',entry:'高端现代/传统双属性，独立站同步'},
+    {brand:'Lofus',asin:'B0DGPTJGZC',parents:1,sales:3249,price:25.86,sizes:'5x7',band:'<$30',channel:'AMAZON_ONLY',entry:'极致低价5x7全屋场景走量'},
+    {brand:'ORINOVA',asin:'B0BTDG14LV',parents:1,sales:3080,price:18.99,sizes:'2x3',band:'<$30',channel:'AMAZON_ONLY',entry:'超低价小尺寸机洗入门款'},
+    {brand:'Rugcomf',asin:'B0FFN4XHJN',parents:1,sales:2889,price:34.99,sizes:'—',band:'$30-49.99',channel:'AMAZON_ONLY',entry:'儿童房低绒安全中低价'}
+  ]},
+  NATURAL_FIBER_WOVEN:{label:'天然纤维编织',rows:[
+    {brand:'Tortania',asin:'B0CG5WMLDZ',parents:3,sales:8168,price:99.99,sizes:'9x12; 5x7',band:'$80-119.99',channel:'AMAZON_ONLY',entry:'大尺寸客厅天然纤维中高价'},
+    {brand:'SAFAVIEH',asin:'B0DPBD6BJ7',parents:4,sales:8156,price:265.50,sizes:'8x10; 2x3; 9x12',band:'$200+',channel:'CROSS_CHANNEL',entry:'高端天然纤维顶奢定位，独立站同步'},
+    {brand:'Rugcomf',asin:'B0FFW74629',parents:1,sales:4217,price:72.24,sizes:'8x10',band:'$50-79.99',channel:'AMAZON_ONLY',entry:'儿童房+客厅天然纤维中价'},
+    {brand:'Hausattire',asin:'B09BZ2S3BX',parents:1,sales:3985,price:85.99,sizes:'—',band:'$80-119.99',channel:'AMAZON_ONLY',entry:'圆形入户天然纤维中高价'},
+    {brand:'Nourison',asin:'B0DY8S1XQQ',parents:1,sales:2290,price:47.84,sizes:'5x7',band:'$30-49.99',channel:'AMAZON_ONLY',entry:'客厅厨房天然纤维中价入门'}
+  ]},
+  MACHINE_WOVEN_TRADITIONAL:{label:'机织传统 / 东方风格',rows:[
+    {brand:'Loloi',asin:'B0F5R4PBFL',parents:2,sales:7482,price:160.45,sizes:'5x7; 8x10',band:'$80-119.99',channel:'CROSS_CHANNEL',entry:'传统风格头部品牌，中高价双尺寸，独立站同步'},
+    {brand:'JONATHAN Y',asin:'B0DJ9Q5HC2',parents:1,sales:1730,price:110.00,sizes:'8x10',band:'$80-119.99',channel:'CROSS_CHANNEL',entry:'传统风格宠物友好，独立站同步'},
+    {brand:'SAFAVIEH',asin:'B0DP6HBX7Q',parents:1,sales:1532,price:207.23,sizes:'8x10',band:'$200+',channel:'CROSS_CHANNEL',entry:'顶奢传统风格定位，独立站同步'}
+  ]},
+  HANDMADE_WOOL:{label:'手工 / 羊毛高端',rows:[
+    {brand:'FALARK',asin:'B0DJ953VY9',parents:1,sales:2492,price:22.67,sizes:'4x6',band:'<$30',channel:'AMAZON_ONLY',entry:'低价儿童房现代款，与"手工羊毛"细分定位存在偏差，需人工复核'},
+    {brand:'Loloi',asin:'B0C4G7FBDR',parents:1,sales:2442,price:130.87,sizes:'8x10',band:'$120-199.99',channel:'CROSS_CHANNEL',entry:'中高价大尺寸现代款，独立站同步'},
+    {brand:'SAFAVIEH',asin:'B0CT4J479Y',parents:1,sales:1828,price:55.33,sizes:'Other',band:'$50-79.99',channel:'CROSS_CHANNEL',entry:'入户中价款，评分偏低(3.9)'}
+  ]}
+};
+function renderBrandMatrix(){
+  const grid=document.getElementById('brandScatterGrid');
+  const keys=Object.keys(brandMatrix);
+  grid.innerHTML = keys.map(k=>{
+    const rows=brandMatrix[k].rows, top=rows[0];
+    const crossCount=rows.filter(r=>r.channel==='CROSS_CHANNEL').length;
+    return `<article class="chart-card" style="padding:16px"><h3 style="font-size:13px;margin:0 0 2px">${brandMatrix[k].label}</h3><p class="chart-note" style="margin:0 0 8px">Top${rows.length}</p><div class="chart-box" style="height:180px"><canvas id="brandScatter_${k}"></canvas></div><div class="chart-conclusion">领先：<b>${top.brand}</b> $${top.price.toFixed(0)}/${fmt(top.sales)}件 · ${crossCount}/${rows.length}跨渠道</div></article>`;
+  }).join('');
+  const tableRows=[];
+  keys.forEach(k=>{
+    const rows=brandMatrix[k].rows;
+    scatterChart('brandScatter_'+k, rows.map(r=>({x:r.price,y:r.sales,label:r.brand,color:r.channel==='CROSS_CHANNEL'?'#173b55':'#0d756d'})), {xLabel:'售价($)→', rFn:r=>3+Math.sqrt(rows.find(x=>x.brand===r.label).parents)*1.8});
+    rows.forEach((r,i)=>{
+      tableRows.push(`<tr>${i===0?`<td rowspan="${rows.length}" style="font-weight:700;vertical-align:top;border-right:1px solid var(--line)">${brandMatrix[k].label}</td>`:''}<td><a href="https://www.amazon.com/dp/${r.asin}" target="_blank" rel="noopener" style="color:var(--navy);font-weight:600;text-decoration:none">${r.brand} ↗</a></td><td>${r.parents}</td><td>${fmt(r.sales)}</td><td>$${r.price.toFixed(2)}</td><td>${r.sizes}</td><td>${r.band}</td><td><span class="decision ${r.channel==='CROSS_CHANNEL'?'keep':'pause'}">${r.channel==='CROSS_CHANNEL'?'跨渠道':'仅Amazon'}</span></td><td style="font-size:10.5px">${r.entry}</td></tr>`);
+    });
+  });
+  document.getElementById('brandTableAll').innerHTML = tableRows.join('');
+}
+renderBrandMatrix();
+
+const dtcMatrix={
+  WASHABLE_PRINTED_LOW_PILE:{label:'可机洗印花低绒',rows:[
+    {brand:'Bungalow Rose',price:98.0,band:'$80-119.99',months:10,products12m:16,latest:4,title:"Kugler Traditional Bordered Floral Pink/Green Printed Washable Flat Pile Area Rug"},
+    {brand:'Wayfair',price:72.5,band:'$80-119.99',months:7,products12m:7,latest:2,title:"MontVoo Abstract Modern Non-Slip Washable Rug Brown"},
+    {brand:'nuLOOM',price:null,band:'$200+',months:3,products12m:5,latest:0,title:"Nuloom Sia SplashGuard Vintage Floral Machine Washable Area Rug"},
+    {brand:'Charlton Home',price:54.0,band:'$50-79.99',months:3,products12m:4,latest:1,title:"Fillender Modern Area Rugs Non-Slip Washable Abstract Soft For Living Room"},
+    {brand:'Ebern Designs',price:68.5,band:'$50-79.99',months:7,products12m:4,latest:2,title:"Vintage Striped Non Slip Washable Area Rug"}
+  ]},
+  SHAG_PLUSH:{label:'高绒 / 毛绒',rows:[
+    {brand:'Mercer41',price:141.5,band:'$80-119.99',months:11,products12m:10,latest:1,title:"Lochas Living Room Area Rug Shaggy Home Decor"},
+    {brand:'Safavieh',price:null,band:'$50-79.99',months:11,products12m:5,latest:0,title:"Hudson Shag Rug"},
+    {brand:'Bungalow Rose',price:83.5,band:'$80-119.99',months:5,products12m:4,latest:3,title:"Large Shag Rugs for Living Room Tie Dyed Ultra Soft Fluffy Furry Area Rugs for Bedroom"},
+    {brand:'nuLOOM',price:140.0,band:'$200+',months:11,products12m:4,latest:1,title:"Nuloom Loni Solid Machine Washable Shag Area Rug"},
+    {brand:'Mainstays',price:59.5,band:'$50-79.99',months:12,products12m:3,latest:1,title:"Mainstays Polyester Solid Shag Area Rug & Runner"}
+  ]},
+  OUTDOOR_PERFORMANCE:{label:'室内外耐候',rows:[
+    {brand:'Unique Loom',price:191.5,band:'$120-199.99',months:12,products12m:10,latest:4,title:"Unique Loom Outdoor Solid Area Rug"},
+    {brand:'Ebern Designs',price:118.5,band:'$80-119.99',months:7,products12m:5,latest:2,title:"Ebern Designs Positano Indoor/Outdoor Rug"},
+    {brand:'Mainstays',price:null,band:'<$30',months:5,products12m:5,latest:0,title:"Mainstays Plaid Outdoor Layering Rug"},
+    {brand:'Beachcrest Home',price:62.0,band:'$30-49.99',months:5,products12m:4,latest:1,title:"Fruitvale Water-Resistant Indoor/Outdoor Rug"},
+    {brand:'GARVEE',price:null,band:'—',months:4,products12m:4,latest:0,title:"Outdoor Rug Waterproof Reversible Rug Indoor Outdoor Plaid Area Rug Plastic Straw Rug for Camping RV Backyard Patio"}
+  ]},
+  MACHINE_MADE_MODERN:{label:'一般机制现代',rows:[
+    {brand:'nuLOOM',price:207.0,band:'$200+',months:12,products12m:19,latest:3,title:"nuLOOM Lenore Vintage Floral Area Rug"},
+    {brand:'Unique Loom',price:209.0,band:'$200+',months:9,products12m:9,latest:3,title:"Unique Loom Floral La Jolla Area Rug"},
+    {brand:'Wrought Studio',price:null,band:'$30-49.99',months:10,products12m:8,latest:0,title:"Wrought Studio Modern Abstract Area Rug Gradient Irregular Carpets Cloud Shape Bedside Rug"},
+    {brand:'Wade Logan',price:185.5,band:'$120-199.99',months:11,products12m:6,latest:1,title:"Wade Logan Autin Solid Color Machine Woven Polyester Area Rug"},
+    {brand:'Wayfair',price:null,band:'$30-49.99',months:9,products12m:6,latest:0,title:"Kerttu Geometric Fade Resistant Indoor Area Rug (17 Stories)"}
+  ]},
+  NATURAL_FIBER_WOVEN:{label:'天然纤维编织',rows:[
+    {brand:'nuLOOM',price:449.0,band:'$200+',months:12,products12m:9,latest:2,title:"Hand Woven Rigo Jute Area Rug nuLOOM"},
+    {brand:'Birch Lane',price:295.5,band:'$200+',months:11,products12m:3,latest:3,title:"Birch Lane Torbin Jute / Sisal Rug"},
+    {brand:'Bay Isle Home',price:102.75,band:'$80-119.99',months:3,products12m:2,latest:2,title:"Bay Isle Home Natural Jute Area Rug"},
+    {brand:'Jonathan Y',price:158.0,band:'$120-199.99',months:5,products12m:2,latest:1,title:"JONATHAN Y Pata Hand Woven Chunky Jute Area Rug"},
+    {brand:'Threshold',price:null,band:'$50-79.99',months:1,products12m:2,latest:0,title:"2'4\"x7' Annandale Solid Runner Rug - Threshold, Handwoven Jute, Flat Pile"}
+  ]},
+  MACHINE_WOVEN_TRADITIONAL:{label:'机织传统 / 东方风格',rows:[
+    {brand:'Threshold',price:null,band:'$50-79.99',months:3,products12m:7,latest:0,title:"Threshold Persian Style Accent Rug"},
+    {brand:'nuLOOM',price:221.5,band:'$200+',months:12,products12m:6,latest:1,title:"Nuloom Hillstone Collection Traditional Vintage Medallion Area Rug"},
+    {brand:'Langley Street',price:68.0,band:'$80-119.99',months:11,products12m:5,latest:3,title:"Bungalow Rose Kahina Vintage Distressed Oriental Pink/Blue Area Rug"},
+    {brand:'Unique Loom',price:null,band:'$120-199.99',months:7,products12m:3,latest:0,title:"Kashan Design Red Area Rug (Unique Loom)"},
+    {brand:'Bungalow Rose',price:null,band:'$120-199.99',months:9,products12m:2,latest:0,title:"Malaika Machine-Washable Non-Slip Medallion Area Rug"}
+  ]},
+  HANDMADE_WOOL:{label:'手工 / 羊毛高端',rows:[
+    {brand:'nuLOOM',price:526.5,band:'$200+',months:12,products12m:21,latest:4,title:"Nuloom Melrose Checked Wool Area Rug"},
+    {brand:'Quince',price:285.0,band:'$200+',months:12,products12m:16,latest:5,title:"Quince Canyon Hand-Tufted Wool Rug"},
+    {brand:'Birch Lane',price:249.0,band:'$120-199.99',months:11,products12m:14,latest:5,title:"Harwich Wool Area Rug Birch Lane"},
+    {brand:'AllModern',price:339.0,band:'$200+',months:12,products12m:11,latest:7,title:"AllModern Danette Hand Loomed Wool Rug"},
+    {brand:'Dash and Albert',price:557.25,band:'$200+',months:12,products12m:9,latest:2,title:"Dash & Albert Paint Chip Hand Micro Hooked Wool Rug"}
+  ]}
+};
+function renderDtcMatrix(){
+  const allRows=[];
+  Object.keys(dtcMatrix).forEach(k=>{
+    dtcMatrix[k].rows.forEach(r=>allRows.push({...r, seg:dtcMatrix[k].label}));
+  });
+  const top12=[...allRows].sort((a,b)=>b.products12m-a.products12m).slice(0,12);
+  hBar('dtcBar', top12.map(r=>({label:`${r.brand} (${r.seg})`,value:r.products12m,color:'#173b55'})), {max:Math.max(...top12.map(r=>r.products12m))*1.2, padL:200, valueFmt:v=>v+'款'});
+  const tableRows=[];
+  Object.keys(dtcMatrix).forEach(k=>{
+    const rows=dtcMatrix[k].rows;
+    rows.forEach((r,i)=>{
+      tableRows.push(`<tr>${i===0?`<td rowspan="${rows.length}" style="font-weight:700;vertical-align:top;border-right:1px solid var(--line)">${dtcMatrix[k].label}</td>`:''}<td>${r.brand}</td><td style="font-size:10.5px;max-width:260px">${r.title}</td><td>${r.price?'$'+r.price.toFixed(2):'—(暂无当前在架价)'}</td><td>${r.band}</td><td>${r.months}</td><td>${r.products12m}</td><td>${r.latest}</td></tr>`);
+    });
+  });
+  document.getElementById('dtcTableAll').innerHTML = tableRows.join('');
+}
+renderDtcMatrix();
+
+const opportunities=[
+  {rank:1,segment:'WASHABLE_PRINTED_LOW_PILE',segLabel:'Washable',band:'$50–79.99',parents:69,sales:249564,score:85.2,decision:'KEEP_PRIORITY',type:'keep',confidence:'HIGH'},
+  {rank:2,segment:'WASHABLE_PRINTED_LOW_PILE',segLabel:'Washable',band:'$80–119.99',parents:35,sales:127623,score:75.6,decision:'KEEP_PRIORITY',type:'keep',confidence:'HIGH'},
+  {rank:3,segment:'WASHABLE_PRINTED_LOW_PILE',segLabel:'Washable',band:'$30–49.99',parents:43,sales:158817,score:75.4,decision:'KEEP_PRIORITY',type:'keep',confidence:'HIGH'},
+  {rank:4,segment:'WASHABLE_PRINTED_LOW_PILE',segLabel:'Washable',band:'<$30',parents:28,sales:136282,score:70.6,decision:'KEEP_CONDITIONAL',type:'conditional',confidence:'HIGH'},
+  {rank:5,segment:'SHAG_PLUSH',segLabel:'Shag',band:'<$30',parents:54,sales:208146,score:54.6,decision:'TECHNICAL_RISK',type:'risk',confidence:'HIGH'},
+  {rank:6,segment:'WASHABLE_PRINTED_LOW_PILE',segLabel:'Washable',band:'$120–199.99',parents:13,sales:45884,score:54.5,decision:'DOWNGRADE_OBSERVE',type:'risk',confidence:'MEDIUM'},
+  {rank:7,segment:'SHAG_PLUSH',segLabel:'Shag',band:'$30–49.99',parents:25,sales:75171,score:42.1,decision:'TECHNICAL_RISK',type:'risk',confidence:'HIGH'},
+  {rank:8,segment:'WASHABLE_PRINTED_LOW_PILE',segLabel:'Washable',band:'$200+',parents:2,sales:5008,score:28.4,decision:'PAUSE_INSUFFICIENT',type:'pause',confidence:'LOW'}
+];
+const decisionColor={keep:'#0d756d',conditional:'#d7772d',risk:'#b34a3c',pause:'#8a8a86'};
+hBar('oppBar', opportunities.map(o=>({label:o.segLabel+' '+o.band,value:o.score,color:decisionColor[o.type]})), {max:100,padL:150,valueFmt:v=>v.toFixed(1)});
+document.getElementById('opportunityBody').innerHTML = opportunities.map(o=>`<tr><td>${o.rank}</td><td>${o.segLabel}</td><td>${o.band}</td><td>${o.parents}</td><td>${fmt(o.sales)}</td><td class="score">${o.score.toFixed(1)}</td><td><span class="decision ${o.type}">${o.decision}</span></td><td>${o.confidence}</td></tr>`).join('');
+
+heatmapChart('heatmap',[
+  {label:'Washable',values:[70.6,75.4,85.2,75.6,54.5,28.4]},
+  {label:'Shag',values:[54.6,42.1,null,null,null,null]}
+], {cols:['<$30','$30-49.99','$50-79.99','$80-119.99','$120-199.99','$200+'], max:90});
+
+const intents=[['通用词',31.5],['多属性组合',28.0],['场景词',23.6],['尺寸词',13.7],['功能词',1.5],['价格 / 品牌 / 风格',1.7]];
+hBar('intentBar', intents.map(x=>({label:x[0],value:x[1],color:'#173b55'})), {max:35,padL:120,valueFmt:v=>v.toFixed(1)+'%'});
+
+const segKeywordData={
+  WASHABLE_PRINTED_LOW_PILE:{label:'可机洗印花低绒',uniqueKw:55,volumeSum:44185,cpc:0.64,share:4.66,kws:[['washable rugs 9x12',15512],['9x12 washable rug',5895],['washable 9x12 area rugs living room',3556],['washable rug 9x12',3098],['washable area rugs 9x12',2707]]},
+  HANDMADE_WOOL:{label:'手工 / 羊毛高端',uniqueKw:23,volumeSum:16032,cpc:0.63,share:1.69,kws:[['wool rugs 9x12',4438],['wool rugs for living room',3417],['wool area rugs 9x12',1476],['hand tufted wool 9x12 rugs',1413],['9x12 wool rug',1215]]},
+  NATURAL_FIBER_WOVEN:{label:'天然纤维编织',uniqueKw:13,volumeSum:18172,cpc:0.95,share:1.92,kws:[['jute rug 9x12',12293],['9x12 jute rug',2578],['sisal rug 9x12',1039],['9x12 jute rugs for living room',698],['jute rugs 9x12',539]]},
+  MACHINE_WOVEN_TRADITIONAL:{label:'机织传统 / 东方风格',uniqueKw:25,volumeSum:6226,cpc:0.65,share:0.66,kws:[['oushak rug 9x12',1511],['oriental rug 9x12',921],['oriental rugs for living room',713],['moroccan 9x12 area rugs',699],['persian rug 9x12',594]]},
+  SHAG_PLUSH:{label:'高绒 / 毛绒',uniqueKw:32,volumeSum:6597,cpc:0.70,share:0.70,kws:[['shag rug 9x12',1744],['plush area rugs 9x12 living room',854],['textured shag rugs 9x12',833],['plush living room rug',667],['9x12 plush area rug',326]]},
+  MACHINE_MADE_MODERN:{label:'一般机制现代',uniqueKw:22,volumeSum:4235,cpc:0.67,share:0.45,kws:[['abstract 9x12 area rugs living room',911],['beige minimalist rugs 9x12',786],['geometric pattern 9x12 area rugs',740],['modern area rugs 9x12 living room',560],['checkered rug 9x12',372]]},
+  OUTDOOR_PERFORMANCE:{label:'室内外耐候',uniqueKw:1,volumeSum:87,cpc:null,share:0.0001,kws:[['outdoor rug 12x15',87]]}
+};
+function renderSegKw(){
+  const keys=Object.keys(segKeywordData);
+  const rows=keys.map(k=>segKeywordData[k]);
+  hBar('segKwBar', rows.map(r=>({label:r.label,value:r.volumeSum,color:'#173b55'})), {max:Math.max(...rows.map(r=>r.volumeSum))*1.15,padL:150,valueFmt:v=>fmt(v)});
+  document.getElementById('segKwGrid').innerHTML = keys.map(k=>{
+    const r=segKeywordData[k];
+    const maxV=Math.max(...r.kws.map(x=>x[1]));
+    const list=r.kws.map(x=>`<div style="margin-bottom:7px"><div style="display:flex;justify-content:space-between;gap:6px;font-size:10.5px;line-height:1.4"><span style="color:var(--ink)">${x[0]}</span><b style="color:var(--teal);white-space:nowrap">${fmt(x[1])}</b></div><div style="height:5px;border-radius:3px;background:#ebe8df;margin-top:3px"><div style="height:100%;border-radius:3px;background:#0d756d;width:${(x[1]/maxV*100).toFixed(0)}%"></div></div></div>`).join('');
+    return `<article class="chart-card" style="padding:16px"><h3 style="font-size:13px;margin:0 0 2px">${r.label}</h3><p class="chart-note" style="margin:0 0 10px">${r.uniqueKw}个关键词 · CPC${r.cpc?'$'+r.cpc.toFixed(2):'—'}</p>${list}</article>`;
+  }).join('');
+  const kwVocRows=[
+    ['WASHABLE_PRINTED_LOW_PILE','washable / 9x12 / living room — "能洗、能放客厅"的功能诉求','WASHABLE_EASY_CLEAN 17.1%','THIN_PADDING 17.3%、COLOR_MISMATCH_FADE 17.0%（购买时不会搜"会不会太薄"）','部分佐证'],
+    ['SHAG_PLUSH','shag / plush / textured — 直接冲着"软"去的','SOFT_COMFORT 43.2%','SHEDDING_FIBER 9.0%、SLIP_BACKING 7.7%（使用后才发现的工艺缺陷）','强佐证购买动机'],
+    ['NATURAL_FIBER_WOVEN','jute / sisal — 材质选择本身隐含"耐用"预期','QUALITY_DURABLE 29.3%','DURABILITY_UNRAVEL 19.1%（细分负评首位，与购买预期同一主题）','动机与痛点同题，反差最大'],
+    ['MACHINE_WOVEN_TRADITIONAL','oushak / oriental / persian / moroccan — 纯风格词','COLOR_DESIGN 35.1%','THIN_PADDING 19.6%、SLIP_BACKING 15.5%','仅覆盖风格，不覆盖体验'],
+    ['MACHINE_MADE_MODERN','abstract / modern / geometric / solid color — 纯风格词','COLOR_DESIGN 31.0%','THIN_PADDING 18.3%、CREASE_CURL_FLATNESS 16.7%','仅覆盖风格，不覆盖体验'],
+    ['HANDMADE_WOOL','wool / hand tufted — 材质与工艺词','QUALITY_DURABLE 14.3%（低置信度，仅49条Review）','SLIP_BACKING 28.6%、DURABILITY_UNRAVEL 28.6%','样本太小，暂不能下结论'],
+    ['OUTDOOR_PERFORMANCE','几乎无显式搜索词（仅87次/月）','QUALITY_DURABLE 30.6%（来自VOC，非关键词）','OUTDOOR_WATER_MILDEW 9.4%、COLOR_MISMATCH_FADE 24.4%','关键词完全缺失，只能靠VOC判断需求']
+  ];
+  document.getElementById('kwVocTable').innerHTML = kwVocRows.map(r=>`<tr><td style="font-weight:700">${segKeywordData[r[0]]?segKeywordData[r[0]].label:r[0]}</td><td style="font-size:11px">${r[1]}</td><td style="font-size:11px">${r[2]}</td><td style="font-size:11px;color:var(--red)">${r[3]}</td><td style="font-size:11px;font-weight:600">${r[4]}</td></tr>`).join('');
+}
+renderSegKw();
+
+hBar('vocBar', [...segments].sort((a,b)=>b.negative-a.negative).map(s=>({label:s.label,value:s.negative,color:'#b34a3c'})), {max:36,padL:132,valueFmt:v=>v.toFixed(1)+'%'});
+document.getElementById('vocDetail').innerHTML = `<div class="card-title"><div><h3>Shag/Plush：VOC主题（负评率最高细分）</h3><p>9,112条映射Review</p></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><h4 style="font-size:11px;margin:0 0 10px;color:var(--muted)">负评痛点</h4><div class="tag-list">${segments[1].pains.map(x=>`<span class="tag risk">${painLabels[x[0]]||x[0]} · ${x[1]}%</span>`).join('')}</div></div><div><h4 style="font-size:11px;margin:0 0 10px;color:var(--muted)">购买驱动</h4><div class="tag-list">${segments[1].drivers.map(x=>`<span class="tag good">${driverLabels[x[0]]||x[0]} · ${x[1]}%</span>`).join('')}</div></div></div><div class="note" style="margin-top:16px">Handmade/Wool样本仅49条Review，VOC结论保持低置信度，不与大样本细分做等置信度比较。</div>`;
+hBar('returnBar',[{label:'Jute rug',value:7.79},{label:'Ruggables washable 9x12',value:5.35},{label:'Outdoor rug',value:3.14},{label:'Shag rug 9x12',value:3.06},{label:'Nursery rug',value:2.19}], {max:9,padL:150,color:'#d7772d',valueFmt:v=>v.toFixed(2)+'%'});
+
+const cells=[
+{rank:1,id:'core',risk:false,title:'WPLP-CORE-8X10 · 可机洗印花低绒',sub:'$50–79.99 价格带 · 验证分 85.2 · 69个Parent · 估算月销量 249,564',decision:'KEEP_PRIORITY · HIGH',decisionClass:'keep',
+ concept:'主销款8x10，扩展5x7/Runner。定位"可机洗印花低绒"，核心是解决薄、折痕、吸尘兼容和色彩一致性——这4个方向在Review语义抽样中8/8样本验证为真实需求。构造仍待打样确认：具体材质、pile height、backing。',
+ sizes:[['8x10',49,66.24],['Runner',21,59.99],['5x7',14,59.99]],
+ pains:[['过薄 / 缺少缓冲',20.5],['色差 / 褪色',17.0],['折痕 / 卷边 / 不平整',14.1],['耐用性 / 开线',9.4],['吸尘 / 日常清洁困难',7.7]],
+ keywords:[['washable rugs 9x12',15512,0.89],['9x12 washable rug',5895,0.60],['washable 9x12 area rugs living room',3556,0.63],['washable rug 9x12',3098,0.69],['washable area rugs 9x12',2707,0.61]],
+ competitors:[['B0G4MDLPL8','RELEANY',69.99,4.6,'色差/褪色'],['B0GX9VNMT9','Valenrug',69.99,4.3,'折痕/不平整'],['B0F3Y4N7G6','PLHXFR',78.99,4.4,'色差/褪色'],['B0GL357H51','Luxturiy',68.99,4.4,'过薄/缺缓冲'],['B0CQYW98R3','UERMEI',79.99,4.5,'折痕/不平整']],
+ diff:[['防薄感升级','过薄/缺缓冲是该单元负评首位（20.5%），5个Top竞品里仍有2个未解决——用更高克重底层或双层结构可直接对标此差评。'],['色彩一致性控制','色差/褪色排第二（17.0%），Top5竞品里3个仍中招——需要在打样阶段加严色卡比对和批次抽检。'],['折痕预处理','折痕/卷边不平整排第三（14.1%），真空压缩包装后的"回弹时间"是可以量化承诺的差异点。']]},
+{rank:2,id:'entry',risk:false,title:'WPLP-ENTRY-5X7 · 可机洗印花低绒',sub:'$30–49.99 价格带 · 验证分 75.4 · 43个Parent · 估算月销量 158,817',decision:'KEEP_PRIORITY · HIGH',decisionClass:'keep',
+ concept:'入门价量款，以5x7和Runner为主，8x10仅做限量测试。产品真实性和可维护性优先于"伪厚感"堆料——这是成本敏感价格带，必须先过低价利润与包装成本Gate。',
+ sizes:[['5x7',64,39.99],['Runner',13,35.99],['8x10',9,48.74]],
+ pains:[['过薄 / 缺少缓冲',18.3],['折痕 / 卷边 / 不平整',14.8],['色差 / 褪色',14.1],['吸尘 / 日常清洁困难',10.6],['耐用性 / 开线',10.0]],
+ keywords:[['washable rugs 9x12',15512,0.89],['9x12 washable rug',5895,0.60],['washable 9x12 area rugs living room',3556,0.63],['washable rug 9x12',3098,0.69],['washable area rugs 9x12',2707,0.61]],
+ competitors:[['B0CRHSPDFN','RELEANY',35.99,4.5,'过薄/缺缓冲'],['B0D8VWCW68','RELEANY',39.99,4.6,'色差/褪色'],['B0GJX8MQC9','Soalmost',35.99,4.8,'—'],['B0DCVCTDHW','BESTSWEETIE',49.99,4.5,'吸尘困难'],['B0H4QLY8TM','PureCozy',39.41,4.5,'开线散边']],
+ diff:[['真实厚度而非"伪厚感"','过薄/缺缓冲仍是首位痛点（18.3%），用背衬结构增加触感而非单纯堆克重，控制成本增量。'],['开线/散边控制','5个Top竞品里已有1个（PureCozy）被点名"耐用性/开线"，边缘锁边工艺是这个价格带少见但可执行的差异点。']]},
+{rank:3,id:'premium',risk:false,title:'WPLP-PREMIUM-8X10 · 可机洗印花低绒',sub:'$80–119.99 价格带 · 验证分 75.6 · 35个Parent · 估算月销量 127,623',decision:'KEEP_PRIORITY · HIGH',decisionClass:'keep',
+ concept:'升级价带款，重点提高平整、颜色/印花一致性、洗后结构和触感可信度。8x10占该单元销量87%，是绝对主力尺寸；结构升级幅度待成本反推和样品测试确认。',
+ sizes:[['8x10',87,94.74],['9x12',4,104.19],['6x9',4,93.14]],
+ pains:[['色差 / 褪色',19.7],['过薄 / 缺少缓冲',17.8],['耐用性 / 开线',11.5],['吸尘 / 日常清洁困难',11.5],['折痕 / 卷边 / 不平整',10.8]],
+ keywords:[['9x12 area rug',101747,0.89],['area rugs 9x12 living room',89697,0.84],['area rugs 9x12 living room clearance',27633,0.89],['9 x 12 area rugs for living room',18297,0.92],['washable rugs 9x12',15512,0.89]],
+ competitors:[['B0CYT2LXHC','Soalmost',89.99,4.4,'过薄/缺缓冲'],['B0FFMB7CT9','palohom',87.88,4.6,'色差/褪色'],['B0DP4RW2LZ','Aelenmu',89.99,4.6,'过薄/缺缓冲'],['B0C5MJMPVR','zesthome',89.99,4.6,'过薄/缺缓冲'],['B0DJ22J2CT','WondRg',99.99,4.5,'折痕/不平整']],
+ diff:[['色彩一致性是升级款的第一战场','色差/褪色在这个价格带跃升为首位痛点（19.7%），Top5竞品里已有1个明确中招。'],['3/5 Top竞品仍"过薄"','说明价格带升高≠竞品自动解决了缓冲问题，用双层结构或加厚绒毛是可验证的差异卖点。']]},
+{rank:4,id:'entrylow',risk:false,title:'可机洗印花低绒 · &lt;$30',sub:'入门冲量价格带 · 验证分 70.6 · 28个Parent · 估算月销量 136,282',decision:'KEEP_CONDITIONAL',decisionClass:'conditional',
+ concept:'尚无正式candidate_id（未进入08产品定义module，仅完成机会漏斗验证），条件性保留——需要先补价格/利润或样本充分性验证，再决定是否升级为正式候选SKU。',
+ sizes:[['5x7',53,27.99],['2x3',25,21.71],['4x6',9,20.92]],
+ pains:[['色差 / 褪色',15.9],['过薄 / 缺少缓冲',15.2],['吸尘 / 日常清洁困难',14.0],['折痕 / 卷边 / 不平整',13.3],['耐用性 / 开线',11.4]],
+ keywords:null,
+ competitors:[['B0F5X83KSM','FXRHLP',23.39,4.6,'过薄/缺缓冲'],['B0FS26QTCM','ExpediX',26.59,4.6,'过薄/缺缓冲'],['B0DKS7H9FM','Hazo Haus',21.84,4.4,'色差/褪色'],['B0C2Z1T5GV','Nakagishi',29.99,4.5,'污渍难清'],['B0CGR5NBPS','RUGSURE',26.98,4.4,'吸尘困难']],
+ diff:null, noProfitNote:'该价格带尚未纳入09成本利润模块的onepage全口径测算（仅覆盖$30-49.99/$50-79.99/$80-119.99三个候选SKU），暂无场景化净利率数据——这正是"KEEP_CONDITIONAL"而非"KEEP_PRIORITY"的原因之一。1688 Small尺寸桶展示价中位¥25.45/件。'},
+];
+const riskCells=[
+{rank:'R1',id:'shaglow',title:'高绒 / 毛绒 · &lt;$30',sub:'验证分 54.6 · 54个Parent · 估算月销量 208,146',decision:'DOWNGRADE_TECHNICAL_RISK',decisionClass:'risk',
+ concept:'该细分整体负评率31.5%为七结构最高，且掉毛/背衬失效是结构性工艺问题，低价位很难靠加成本解决——初筛分不低（需求规模大），但风险扣分直接把验证分从初筛拉到54.6。',
+ sizes:[['4x6',47,18.99],['3x5',10,17.54]],
+ pains:[['过薄 / 缺少缓冲',15.9],['掉毛 / 纤维脱落',8.9],['打滑 / 背衬失效',8.1],['耐用性 / 开线',6.8],['色差 / 褪色',6.7]],
+ competitors:[['B0D9GFYJBV','OLANLY',12.98,4.4,'—'],['B085C9LRJB','Amdrebio',13.99,4.5,'过薄/缺缓冲'],['B09JG5TNKG','PAGISOFE',18.99,4.4,'过薄/缺缓冲']],
+ diff:[['掉毛+防滑双解','是这个细分唯二没被充分解决的工艺问题，但需要先做小批量打样验证成本增量是否在$18-25成本区间内可控。']]},
+{rank:'R2',id:'shagmid',title:'高绒 / 毛绒 · $30–49.99',sub:'验证分 42.1 · 25个Parent · 估算月销量 75,171',decision:'DOWNGRADE_TECHNICAL_RISK',decisionClass:'risk',
+ concept:'价格带提高后规模反而更小（25 vs 54个Parent），验证分进一步跌到42.1——价格提升没有换来更健康的竞争结构或更低的负评率，属于"既不便宜也不解决问题"的夹心地带。',
+ sizes:[['8x10',41,44.99],['5x8',20,34.99]],
+ pains:[['色差 / 褪色',10.9],['过薄 / 缺少缓冲',10.9],['掉毛 / 纤维脱落',10.5]],
+ competitors:[['B0GHK7XRXL','Luxturiy',42.49,4.6,'掉毛/脱落'],['B0GGBBLHRT','PLHXFR',39.99,4.6,'过薄/缺缓冲']],
+ diff:[['不建议作为新品切入点','规模、集中度、负评率三项均不占优；如果要做Shag，优先看&lt;$30价格带而非这一档。']]}
+];
+
+const profitData={
+  core:{scenarios:[
+    {name:'Optimistic',price:69.99,factory:150,factoryUsd:22.06,freight:9.30,fba:18.13,referral:10.50,otherVar:7.08,profit:2.92,margin:0.0417},
+    {name:'Base',price:64.79,factory:168,factoryUsd:24.71,freight:9.30,fba:18.39,referral:9.23,otherVar:15.37,profit:-6.21,margin:-0.0958},
+    {name:'Conservative',price:59.99,factory:210,factoryUsd:30.88,freight:9.30,fba:18.66,referral:8.10,otherVar:10.48,profit:-17.43,margin:-0.2906}
+  ], supplier:'Optimistic/Base=天津盛汇/武清区利吉地毯厂；Conservative=天津市盈通地毯有限公司', current:'¥168'},
+  entry:{scenarios:[
+    {name:'Optimistic',price:44.99,factory:70,factoryUsd:10.29,freight:4.53,fba:10.63,referral:6.75,otherVar:4.75,profit:8.04,margin:0.1787},
+    {name:'Base',price:39.99,factory:92,factoryUsd:13.53,freight:4.53,fba:10.92,referral:5.70,otherVar:5.93,profit:-0.65,margin:-0.0163},
+    {name:'Conservative',price:34.99,factory:104.88,factoryUsd:15.42,freight:4.53,fba:11.13,referral:4.72,otherVar:6.38,profit:-7.19,margin:-0.2055}
+  ], supplier:'均取自天津盛汇地毯有限公司(5x7近似)；Conservative改用翌和(天津)地毯有限公司', current:'¥92'},
+  premium:{scenarios:[
+    {name:'Optimistic',price:104.99,factory:168,factoryUsd:24.71,freight:10.89,fba:19.63,referral:15.75,otherVar:11.20,profit:22.81,margin:0.2173},
+    {name:'Base',price:94.99,factory:210,factoryUsd:30.88,freight:10.89,fba:20.00,referral:13.54,otherVar:14.54,profit:5.14,margin:0.0541},
+    {name:'Conservative',price:84.99,factory:340,factoryUsd:50.00,freight:10.89,fba:20.37,referral:11.47,otherVar:15.02,profit:-22.76,margin:-0.2678}
+  ], supplier:'Optimistic/Base=天津市武清区利吉地毯厂；Conservative=义乌市金球电子商务（价格跳升至¥340，需人工复核是否同结构）', current:'¥210'}
+};
+const costItemLabels=[['factoryUsd','1688采购成本'],['freight','头程运费'],['fba','FBA费用(仓储+入库+订单处理)'],['referral','平台佣金(已扣Coupon)'],['otherVar','广告+Coupon+退货(合并倒算)']];
+
+function renderCellCard(c){
+  const topSize=c.sizes[0], topPain=c.pains[0];
+  const kwBlock = c.keywords ? `<div class="block"><h4>关键词（月搜索量 Top5）</h4><div class="chart-box" style="height:110px"><canvas id="kw_${c.id}"></canvas></div><div class="chart-conclusion">结论：<b>${c.keywords[0][0]}</b>搜索量最高（${fmt(c.keywords[0][1])}/月），占该单元Top5关键词总量的${(c.keywords[0][1]/c.keywords.reduce((s,k)=>s+k[1],0)*100).toFixed(0)}%。</div></div>` : '';
+  const diffBlock = c.diff ? `<div class="block" style="margin-top:4px"><h4>差异化方向</h4><div class="diff-list">${c.diff.map(d=>`<div class="diff-item"><b>${d[0]}</b>${d[1]}</div>`).join('')}</div></div>` : '';
+  const prices=c.competitors.map(cm=>cm[2]); const priceMin=Math.min(...prices), priceMax=Math.max(...prices);
+  const noPainCount=c.competitors.filter(cm=>!cm[4]||cm[4]==='—').length;
+  const profit = profitData[c.id];
+  let profitBlock;
+  if(profit){
+    const totalCostPct = s => (1-s.margin)*100;
+    const rows = profit.scenarios.map(s=>`<tr><td>${s.name}</td><td>$${s.price.toFixed(2)}</td><td>¥${s.factory}</td><td style="color:${s.profit>=0?'#0d756d':'#b34a3c'};font-weight:700">${s.profit>=0?'$':'-$'}${Math.abs(s.profit).toFixed(2)}</td><td>${totalCostPct(s).toFixed(1)}%</td><td style="color:${s.margin>=0?'#0d756d':'#b34a3c'};font-weight:700">${(s.margin*100).toFixed(1)}%</td></tr>`).join('');
+    const marginChips = profit.scenarios.map(s=>`<div class="detail-stat"><span>${s.name} 净利率</span><b style="color:${s.margin>=0?'#0d756d':'#b34a3c'}">${s.margin>=0?'+':''}${(s.margin*100).toFixed(1)}%</b></div>`).join('');
+    const base=profit.scenarios[1];
+    const costItemsRanked=costItemLabels.map(([k,label])=>[label,base[k]]).sort((a,b)=>b[1]-a[1]);
+    profitBlock = `<div class="block"><h4>产品成本与利润（onepage全口径）</h4>
+      <div class="detail-grid" style="grid-template-columns:repeat(3,1fr)">${marginChips}</div>
+      <div style="margin-top:14px"><span style="font-size:10.5px;color:var(--muted)">Base场景成本瀑布（$）</span><div class="chart-box waterfall-wrap" style="height:200px"><canvas id="wf_${c.id}"></canvas></div>
+        <div class="chart-conclusion">结论：Base场景单件利润<b>${base.profit>=0?'+$':'-$'}${Math.abs(base.profit).toFixed(2)}</b>（净利率${(base.margin*100).toFixed(1)}%），${base.profit>=0?'已转正':'尚未转正，需压缩成本或提价'}。</div>
+      </div>
+      <div style="margin-top:14px"><span style="font-size:10.5px;color:var(--muted)">Base场景各项费用占售价比例（%）</span><div class="chart-box" style="height:200px"><canvas id="ratio_${c.id}"></canvas></div>
+        <div class="chart-conclusion">结论：<b>${costItemsRanked[0][0]}</b>占售价比例最高（${(costItemsRanked[0][1]/base.price*100).toFixed(1)}%），是这个场景下最大的单项成本杠杆。</div>
+      </div>
+      <table class="opportunity-table" style="margin-top:10px"><thead><tr><th>场景</th><th>售价</th><th>1688成本</th><th>单件利润</th><th>总成本占比</th><th>净利率</th></tr></thead><tbody>${rows}</tbody></table>
+      <div class="supplier-row">1688供应商：${profit.supplier}，当前展示价${profit.current}。总成本占比=1−净利率。2026-08-29起改用<a href="https://lyg15911055415-cyber.github.io/fba-calculator/" target="_blank" rel="noopener" style="color:var(--navy)">FBA利润测算台（lyg15911055415-cyber.github.io/fba-calculator）</a>重新计算：官方2026-01-15生效费率+按包装尺寸反推的外箱/装箱数+普船海派头程(¥8.2/kg,大森林美东经济卡派)。该工具未单列进口关税，"广告+Coupon+退货"为按最终净利率倒算的合并项，非逐项精确拆分。包装/国内运费视为已含在1688采购价内（用户经验判断，未获供应商书面确认，待打样核实）。</div>
+      <div class="gate-tag">BLOCKED_FORMAL_INPUTS</div></div>`;
+  } else if(c.noProfitNote){
+    profitBlock = `<div class="block"><h4>产品成本</h4><div class="source-note" style="font-size:11px;color:var(--muted);line-height:1.6">${c.noProfitNote}</div></div>`;
+  } else {
+    profitBlock = '';
+  }
+  return `<article class="cell-card ${c.risk?'risk':''}">
+    <div class="cell-top"><div class="cell-title"><div class="cell-rank">${c.rank}</div><div><h3>${c.title}</h3><span>${c.sub}</span></div></div><span class="decision ${c.decisionClass}" style="font-size:11px;padding:7px 12px">${c.decision}</span></div>
+    <div class="cell-body">
+      <div>
+        <div class="block"><h4>产品定义</h4><div class="concept">${c.concept}</div></div>
+        <div class="block"><h4>尺寸结构（销量占比）</h4><div class="chart-box" style="height:${c.sizes.length*34+10}px"><canvas id="size_${c.id}"></canvas></div>
+          <div class="chart-conclusion">结论：<b>${topSize[0]}</b>是绝对主力尺寸，占该单元销量${topSize[1]}%。</div>
+        </div>
+        <div class="block"><h4>核心需求（VOC负评占比 Top5）</h4><div class="chart-box" style="height:150px"><canvas id="pain_${c.id}"></canvas></div>
+          <div class="chart-conclusion">结论：<b>${topPain[0]}</b>是首位负评原因（${topPain[1]}%），应作为产品定义的第一优先改进项。</div>
+        </div>
+        ${kwBlock}
+      </div>
+      <div>
+        <div class="block"><h4>核心竞对：价格 vs 评分</h4><div class="chart-box" style="height:200px"><canvas id="comp_${c.id}"></canvas></div>
+          <div class="chart-conclusion">结论：Top5竞品价格集中在<b>$${priceMin.toFixed(0)}–$${priceMax.toFixed(0)}</b>，其中${c.competitors.length-noPainCount}/${c.competitors.length}个被标出具体差评主题，说明该价格带竞品普遍存在可改进空间。</div>
+          <div class="comp-list" style="margin-top:10px">${c.competitors.map(cm=>`<div class="comp-row"><a href="https://www.amazon.com/dp/${cm[0]}" target="_blank" rel="noopener">${cm[1]} · ${cm[0]}</a><span class="price">$${cm[2]}</span><span class="pain-tag">${cm[4]}</span></div>`).join('')}</div>
+        </div>
+        ${profitBlock}
+      </div>
+    </div>
+    ${diffBlock}
+  </article>`;
+}
+document.getElementById('priorityCells').innerHTML = cells.map(renderCellCard).join('');
+document.getElementById('riskCells').innerHTML = riskCells.map(c=>renderCellCard({...c,risk:true,keywords:null,noProfitNote:null})).join('');
+
+[...cells, ...riskCells].forEach(c=>{
+  hBar('size_'+c.id, c.sizes.map(s=>({label:s[0],value:s[1],color:'#0d756d'})), {max:Math.max(...c.sizes.map(s=>s[1]))*1.2, padL:70, valueFmt:v=>v+'% · $'+c.sizes.find(s=>s[1]===v)[2]});
+  hBar('pain_'+c.id, c.pains.map(p=>({label:p[0],value:p[1],color:'#b34a3c'})), {max:Math.max(...c.pains.map(p=>p[1]))*1.25, padL:150, valueFmt:v=>v.toFixed(1)+'%'});
+  if(c.keywords) hBar('kw_'+c.id, c.keywords.map(k=>({label:k[0],value:k[1],color:'#173b55'})), {max:Math.max(...c.keywords.map(k=>k[1]))*1.2, padL:150, valueFmt:v=>fmt(v)});
+  scatterChart('comp_'+c.id, c.competitors.map(cm=>({x:cm[2],y:cm[3],label:cm[1],color:cm[4]&&cm[4]!=='—'?'#b34a3c':'#0d756d'})), {xLabel:'售价 ($) →', yMin:4.0, yMax:5.0});
+  const p=profitData[c.id];
+  if(p){const base=p.scenarios[1]; waterfallChart('wf_'+c.id,[
+    {label:'售价',value:base.price,type:'total'},
+    {label:'1688成本',value:-base.factoryUsd},{label:'头程运费',value:-base.freight},{label:'FBA费用',value:-base.fba},
+    {label:'佣金',value:-base.referral},{label:'广告+Coupon+退货',value:-base.otherVar},{label:'利润',value:base.profit,type:'total'}
+  ]);
+  hBar('ratio_'+c.id, costItemLabels.map(([k,label])=>({label,value:base[k]/base.price*100,color:'#0d756d'})), {max:Math.max(...costItemLabels.map(([k])=>base[k]/base.price*100))*1.25, padL:172, valueFmt:v=>v.toFixed(1)+'%'});
+  }
+});
+
+groupedBar('marginGroupBar', ['ENTRY-5x7','CORE-8x10','PREMIUM-8x10'], [
+  {name:'Optimistic',color:'#0d756d',values:[0.1787,0.0417,0.2173]},
+  {name:'Base',color:'#d7772d',values:[-0.0163,-0.0958,0.0541]},
+  {name:'Conservative',color:'#b34a3c',values:[-0.2055,-0.2906,-0.2678]}
+]);
+</script>
+</body>
+</html>
