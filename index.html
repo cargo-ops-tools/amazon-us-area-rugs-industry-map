@@ -53,6 +53,20 @@
   @media(max-width:950px){.hero{grid-template-columns:1fr}.nav{display:none}.hero{padding-top:44px}.shell{padding-left:18px;padding-right:18px}.explorer{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(2,1fr)}.detail-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:560px){.kpis{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:40px}.source-grid{grid-template-columns:1fr}.assumption-list{columns:1}.opportunity-table{min-width:720px}.footer{display:block}.footer span{display:block;margin-top:7px}}
   @media print{.topbar,.toolbar,.segment-tabs{display:none!important}.shell{max-width:none;padding:0 12px}.section{break-inside:avoid}}
+
+  .size-guide{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px}
+  .sg-card{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--card);display:flex;flex-direction:column;gap:7px}
+  .sg-card svg{display:block;width:100%;height:auto;border-radius:8px;background:#f2efe6}
+  .sg-card .sg-rug{fill:rgba(13,117,109,.22);stroke:#0d756d;stroke-width:1}
+  .sg-card .sg-furn{fill:#d9c9b0;stroke:#8a6d4b;stroke-width:.7}
+  .sg-card .sg-wall{fill:#b8b2a3}
+  .sg-card .sg-door{fill:#d7772d}
+  .sg-card .sg-lbl{font-size:6.5px;fill:#0d756d;font-weight:700;font-family:"Segoe UI",sans-serif}
+  .sg-card h4{margin:0;font-size:13px;display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+  .sg-card h4 small{font-weight:400;color:var(--muted);font-size:10.5px}
+  .sg-card p{margin:0;font-size:11px;line-height:1.55;color:var(--ink)}
+  .sg-card p span{color:var(--muted)}
+  .sg-chip{align-self:flex-start;font-size:10px;font-weight:700;color:var(--teal);background:var(--mint);border-radius:999px;padding:2px 8px}
 </style>
 </head>
 <body>
@@ -124,6 +138,11 @@
     </article>
     <article class="chart-card" style="margin-top:16px"><h3>中位Price per Sqft热力图（$/sqft）</h3><p class="chart-note">按面积折算后的单位价格，才是跨尺寸、跨细分比较的正确口径</p><div class="chart-box" style="height:300px"><canvas id="ppsfHeatmap"></canvas></div>
       <div class="chart-conclusion">结论：换算成$/sqft后，Shag的Round款($7.88/sqft)反而是全表最贵的单位面积价格，比它自己的8x10款($0.57/sqft)贵了<b>13.7倍</b>——小尺寸/异形款的单位面积溢价远高于大尺寸标品，这个规律在多个细分里重复出现（Washable的2x3=$3.62/sqft vs 8x10=$0.91/sqft）。</div>
+    </article>
+    <article class="chart-card" style="margin-top:16px"><h3>不同尺寸对应的空间与产品场景（按真实比例示意）</h3><p class="chart-note">俯视图，所有卡片统一比例(1ft≈8px)：绿色=地毯，棕色=家具(沙发7ft、Queen床5×6.7ft、餐桌等标准尺寸)，橙色=门，灰色=走廊墙面。适配规则综合Wayfair、Home Depot、Ruggable、Revival Rugs等零售商尺寸指南，各家口径略有出入，示意取最常见情形。卡片底部的Washable占比/中位价来自本页价格矩阵真实数据。</p>
+      <div class="size-guide" id="sizeGuide"></div>
+      <div class="chart-conclusion">结论：Washable细分里<b>8x10(37.7%)和5x7(29.8%)合计占67.6%</b>，正好对应"标准客厅/Queen床"和"小客厅/公寓"两个最大的需求场景；Runner占11.8%，对应走廊/厨房，需求不小但用途窄；<b>9x12只占3.5%</b>，对应大客厅/组合沙发/King床，场景面小但中位价最高($155.99)；2x3、3x5、4x6等小尺寸合计约8.3%，属于门垫/床边/玄关的补充品。选尺寸做产品时，应先判断它对应的是哪个空间，再看这个空间在Amazon上是不是大需求。</div>
+      <div class="supplier-row" style="margin-top:10px">尺寸指南来源：<a href="https://www.wayfair.com/ideas-and-advice/how-to-choose-a-rug-size-S4494.html" target="_blank" rel="noopener" style="color:var(--navy)">Wayfair</a> · <a href="https://www.homedepot.com/c/rug_sizes" target="_blank" rel="noopener" style="color:var(--navy)">Home Depot</a> · <a href="https://ruggable.com/pages/size-guide" target="_blank" rel="noopener" style="color:var(--navy)">Ruggable</a> · <a href="https://lp.revivalrugs.com/pages/shop-area-rug-size-guide" target="_blank" rel="noopener" style="color:var(--navy)">Revival Rugs</a> · <a href="https://homemadelovely.com/area-rug-size-guide/" target="_blank" rel="noopener" style="color:var(--navy)">Homemade Lovely</a>。通用规则：地毯四周留约12–24in裸露地面；客厅沙发/座椅至少前两条腿压在地毯上；餐桌地毯需比桌面每边宽24–30in，保证拉出椅子时椅腿仍在毯上；走廊/Runner两侧留约6in以上地面。</div>
     </article>
     <article class="table-card" style="margin-top:16px"><div class="card-title"><div><h3>细分×尺寸明细（48条，按细分分组）</h3><p>Parent数<3的行样本量较小，价格区间(P25-P75)供参考</p></div></div><div class="table-scroll"><table class="opportunity-table"><thead><tr><th>细分</th><th>尺寸/形状</th><th>Parent数</th><th>估算月销量</th><th>中位价</th><th>价格区间(P25-P75)</th><th>中位$/sqft</th><th>细分内销量占比</th></tr></thead><tbody id="priceSizeTable"></tbody></table></div></article>
     <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
@@ -510,6 +529,37 @@ function renderPriceSizeMatrix(){
   document.getElementById('priceSizeTable').innerHTML = tableRows.join('');
 }
 renderPriceSizeMatrix();
+
+(function renderSizeGuide(){
+  const S=8, VW=140, VH=112, CX=70, CY=56;
+  const R=(x,y,w,h,c)=>({t:'r',x,y,w,h,c});
+  const C=(x,y,d,c)=>({t:'c',x,y,d,c});
+  const sofa=(x,y,w=7,h=3)=>R(x,y,w,h,'sg-furn');
+  const guide=[
+   {k:'2x3',w:3,h:2,cm:'61×91cm',scene:[R(0,-1.75,3.4,.3,'sg-door')],space:'入户门口、浴室/厨房门前',item:'门垫、浴室垫、厨房垫等小件，单独铺设',lines:'Washable、Machine Modern 的低价引流款'},
+   {k:'3x5',w:5,h:3,cm:'91×153cm',scene:[R(0,-2.6,6,2,'sg-furn')],space:'玄关、厨房水槽/台面前、书桌/床边',item:'功能型脚垫，定义局部区域',lines:'Washable、Machine Modern、Natural Fiber'},
+   {k:'4x6',w:6,h:4,cm:'122×183cm',scene:[R(0,-2.6,6.3,3.2,'sg-furn')],space:'单人床/儿童房床边、书桌下、小玄关',item:'儿童/学生房、宿舍、飘窗区域',lines:'Washable、Shag（儿童房毛绒款）'},
+   {k:'5x7',w:7,h:5,cm:'152×213cm',scene:[sofa(0,-3.2,5.3,2.8),R(0,0.3,3,1.5,'sg-furn')],space:'小客厅/公寓客厅(双人沙发前腿压毯)、书房、双人床侧边',item:'入门主力尺寸，价格最亲民，适合公寓人群',lines:'Washable、Shag、Machine Modern'},
+   {k:'5x8',w:8,h:5,cm:'152×244cm',scene:[sofa(0,-3.2,6.5,3),R(0,0.4,3.5,1.8,'sg-furn')],space:'小客厅、Full/Twin床床尾、4人小餐桌',item:'比5x7多出一段纵深，适合有一定长度的空间',lines:'Washable、Shag'},
+   {k:'6x9',w:9,h:6,cm:'183×274cm',scene:[sofa(0,-3.6,7,3),R(0,0.5,4,2,'sg-furn')],space:'中小客厅(沙发前腿压毯)、4–6人餐桌、Full床',item:'客厅/餐厅通用尺寸，常作为"稍大一号"的升级款',lines:'Washable、Machine Modern、Outdoor'},
+   {k:'8x10',w:10,h:8,cm:'244×305cm',scene:[R(0,-2.65,5,6.7,'sg-furn'),R(-3.4,-5.4,1.5,1.5,'sg-furn'),R(3.4,-5.4,1.5,1.5,'sg-furn')],space:'标准客厅(沙发+茶几整套摆放)、Queen床(横铺床下约2/3)、6人餐桌',item:'Amazon最大需求尺寸，客厅主力款',lines:'Washable、Shag、Natural Fiber、Outdoor、Traditional'},
+   {k:'9x12',w:12,h:9,cm:'274×366cm',scene:[R(0,-5.2,9,3,'sg-furn'),R(3,-0.7,3,5.4,'sg-furn'),R(-1.4,0.4,4,2.2,'sg-furn')],space:'大客厅/L型组合沙发、King床、6–8人餐桌',item:'大空间整体铺满，客单价高、需求面小',lines:'Washable、Natural Fiber、Outdoor'},
+   {k:'10x14',w:14,h:10,cm:'305×427cm',scene:[sofa(0,-5.6,8,3),R(-5.3,0.2,3,3,'sg-furn'),R(5.3,0.2,3,3,'sg-furn'),R(0,0.4,4,2.4,'sg-furn')],space:'大开间/客餐厅一体、别墅客厅、会客区',item:'超大尺寸，样本极少，运输与FBA成本高',lines:'Washable、Shag（极少量）'},
+   {k:'Runner',w:8,h:2,cm:'常见2×6–2.5×10ft',scene:[R(0,-2.15,16,.5,'sg-wall'),R(0,2.15,16,.5,'sg-wall')],space:'走廊、厨房岛台前、长条玄关(两侧各留约6in地面)',item:'长条形，按走廊宽度选，规格跨度大',lines:'Washable、Machine Modern、Natural Fiber'},
+   {k:'Round',w:5,h:5,cm:'直径3–5ft',scene:[C(0,0,3.4,'sg-furn'),C(-2,0,1.3,'sg-furn'),C(2,0,1.3,'sg-furn'),C(0,-2,1.3,'sg-furn'),C(0,2,1.3,'sg-furn')],round:true,space:'圆餐桌下(比桌面每边宽约24in)、阅读角、玄关圆桌下',item:'异形款，单位面积溢价高但样本极少',lines:'Washable、Shag、Outdoor'}
+  ];
+  const wash=priceSizeData.find(x=>x.seg==='WASHABLE_PRINTED_LOW_PILE');
+  const el=document.getElementById('sizeGuide');
+  el.innerHTML=guide.map(g=>{
+    const rug=g.round?`<circle class="sg-rug" cx="${CX}" cy="${CY}" r="${g.w*S/2}"/>`:`<rect class="sg-rug" x="${CX-g.w*S/2}" y="${CY-g.h*S/2}" width="${g.w*S}" height="${g.h*S}" rx="1.5"/>`;
+    const sh=g.scene.map(o=>o.t==='c'?`<circle class="${o.c}" cx="${CX+o.x*S}" cy="${CY+o.y*S}" r="${o.d*S/2}"/>`:`<rect class="${o.c}" x="${CX+(o.x-o.w/2)*S}" y="${CY+(o.y-o.h/2)*S}" width="${o.w*S}" height="${o.h*S}" rx="1.5"/>`).join('');
+    const lbl=`<text class="sg-lbl" x="${CX}" y="${CY+(g.round?0:g.h*S/2)+(g.round?3:-3)}" text-anchor="middle">${g.round?'Ø'+g.w+'ft':g.w+'×'+g.h+'ft'}</text>`;
+    const r=wash.rows.find(x=>x[0]===g.k);
+    const chip=r?`Washable 销量占比 ${(r[7]*100).toFixed(1)}% · 中位价 $${r[3].toFixed(2)}`:'Washable 无该尺寸样本';
+    const title=g.k==='Runner'?'Runner 走廊款':g.k==='Round'?'Round 圆形':g.k.replace('x','×')+' ft';
+    return `<div class="sg-card"><svg viewBox="0 0 ${VW} ${VH}" role="img" aria-label="${g.k}尺寸示意">${rug}${sh}${lbl}</svg><h4>${title}<small>${g.cm}</small></h4><p><span>适配空间：</span>${g.space}</p><p><span>产品定位：</span>${g.item}</p><p><span>常见细分：</span>${g.lines}</p><div class="sg-chip">${chip}</div></div>`;
+  }).join('');
+})();
 
 const crossChannelBrands=[
   {label:'PureCozy (Washable)',a:116.99,b:100.00},
