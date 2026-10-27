@@ -59,8 +59,8 @@
 <header class="topbar"><div class="topbar-inner"><div class="brand">AREA RUGS / US<small>行业地图 · 合并可视化版 v0.10</small></div><nav class="nav"><a href="#overview">概览</a><a href="#segments">细分对比</a><a href="#market">市场趋势</a><a href="#pricesize">价格矩阵</a><a href="#brands">品牌矩阵</a><a href="#opportunity">机会矩阵</a><a href="#keyword">Keyword</a><a href="#voc">VOC</a><a href="#cells">机会单元</a><a href="#profit">利润对比</a><a href="#method">口径</a></nav><div class="toolbar"><button class="tool-btn primary" type="button" onclick="window.print()">打印 / PDF</button></div></div></header>
 <main class="shell">
   <section class="hero" id="overview">
-    <div><div class="eyebrow">Industry Map · v0.10 · 2026-08-27 · 合并版</div><h1>Amazon US<br>Area Rugs 行业地图</h1><p>把此前两份文档（总览 v0.9.0 + 机会单元深度卡片 v0.9.1）合并为一份，并把大段文字换成条形图、热力图、散点图和成本瀑布图——同一页内可以直接比较7个细分、8个机会单元和3个候选SKU的表现，不用来回切页面。</p></div>
-    <aside class="gate" id="gate"><div class="label">CURRENT DECISION GATE</div><strong>研究结论可用 · 商业立项阻断</strong><p>市场、商品、Keyword、VOC与价格带机会已形成闭环；正式FOB、实测包装、官方FBA、HTS与经营实际尚未放行。</p><div class="badges"><span class="badge">MAP READY</span><span class="badge">7 SEGMENTS</span><span class="badge">6 OPPORTUNITY CELLS</span><span class="badge warn">PROFIT BLOCKED</span></div></aside>
+    <div><div class="eyebrow">Industry Map · v0.10 · 2026-08-27 · 合并版</div><h1>Amazon US<br>Area Rugs 行业地图</h1><p>把此前两份文档（总览 v0.9.0 + 机会单元深度卡片 v0.9.1）合并为一份，并把大段文字换成条形图、热力图、散点图和成本瀑布图——同一页内可以直接比较7个细分、8个机会单元和5个候选SKU的表现，不用来回切页面。</p></div>
+    <aside class="gate" id="gate"><div class="label">CURRENT DECISION GATE</div><strong>研究结论可用 · 商业立项阻断</strong><p>市场、商品、Keyword、VOC与价格带机会已形成闭环；含税正式报价、样品实测包装、官方FBA、HTS与经营实际尚未放行（已有供应商不含税报价与包装表）。</p><div class="badges"><span class="badge">MAP READY</span><span class="badge">7 SEGMENTS</span><span class="badge">6 OPPORTUNITY CELLS</span><span class="badge warn">PROFIT BLOCKED</span></div></aside>
   </section>
   <section class="kpis" aria-label="关键数据规模">
     <article class="kpi"><div class="label">统一商品池</div><div class="value">26,157</div><div class="source">唯一ASIN · v0.20</div></article>
@@ -233,45 +233,27 @@
   </section>
 
   <section class="section" id="profit">
-    <div class="section-head"><h2>三档候选SKU · 利润全景对比</h2><p>onepage利润测算逻辑.xlsx 全口径：1688成本+头程+FBA+佣金+Coupon+TACoS+退货+关税</p></div>
-    <article class="chart-card"><h3>净利率对比：3个SKU × 3个场景</h3><p class="chart-note">只有Optimistic场景全部转正；Base/Conservative普遍为负</p><div class="chart-box" style="height:280px"><canvas id="marginGroupBar"></canvas></div>
+    <div class="section-head"><h2>候选SKU · 利润全景对比（供应商真实报价版）</h2><p>2026-10-27重算：供应商报价表(元/㎡) + 供应商真实折叠尺寸/单重/外箱规格 + FBA利润测算台(fork 4)</p></div>
+    <article class="chart-card"><h3>净利率对比：5个SKU × 3个场景</h3><p class="chart-note">ENTRY-5x7、PREMIUM-8x10、9x12、Runner 2x8；CORE-8x10在所有场景下都亏损</p><div class="chart-box" style="height:300px"><canvas id="marginGroupBar"></canvas></div>
       <div class="chart-legend"><span><i style="background:#0d756d"></i>Optimistic</span><span><i style="background:#d7772d"></i>Base</span><span><i style="background:#b34a3c"></i>Conservative</span></div>
-      <div class="chart-conclusion">结论：PREMIUM-8x10的Base和Optimistic都转正（+5.4%/+21.7%），ENTRY-5x7 Base接近打平（-1.6%）；三个SKU的Conservative场景仍全部转负（-21%~-29%），说明成本容错空间依然很窄。</div>
+      <div class="chart-conclusion">结论：用真实报价和真实包装重算后，<b>9x12(Base +22.9%)和Runner 2x8(Base +27.9%)是仅有的两个在Conservative场景仍然盈利的SKU</b>(+13.2%/+18.4%)；ENTRY-5x7 Base由−1.6%转为+3.2%；PREMIUM-8x10 Base由+5.4%降到+0.7%；CORE-8x10由−9.6%降到−15.7%，三个场景全部亏损。</div>
     </article>
-    <div class="note">2026-08-29模型二次校准：应用户反馈调整两处假设——① 广告TACoS三档统一改为10%（此前Base 15%/Conservative 20%，用户反馈地毯类目稳定期广告费一般在10%左右）；② 汇率三档统一改为¥6.8/$（此前按Optimistic 7.25/Base 7.095/Conservative 6.95分档）。二次校准后三个SKU的净利率<b>进一步改善</b>：ENTRY-5x7 Base −4.6%→<b>−1.6%</b>；CORE-8x10 Base −12.2%→<b>−9.6%</b>；PREMIUM-8x10 Base +2.4%→<b>+5.4%</b>。数据源仍是<a href="https://lyg15911055415-cyber.github.io/fba-calculator/" target="_blank" rel="noopener" style="color:var(--teal)">FBA利润测算台</a>（官方2026-01-15生效FBA费率），普船海派(¥8.2/kg，大森林美东经济卡派)头程渠道，该工具未单列进口关税。三档候选的完整成本瀑布图见上方"机会单元深度卡片"内每张卡片。</div>
+    <article class="table-card" style="margin-top:16px"><div class="card-title"><div><h3>五个SKU的核心输入与Base结果</h3><p>包装规格、单重、外箱均取自供应商包装表；采购价=报价(不含税)×面积×1.13</p></div></div><div class="table-scroll"><table class="opportunity-table"><thead><tr><th>SKU</th><th>供应商款式</th><th>折叠尺寸(cm)/单重</th><th>外箱·每箱件数</th><th>FBA尺寸档</th><th>含税采购价</th><th>Base售价</th><th>Base净利润/件</th><th>Base净利率</th></tr></thead><tbody>
+      <tr><td>ENTRY 5x7</td><td>350g仿羊绒+TPR ¥21/㎡</td><td>40×28×12 / 3.99kg</td><td>50×40×40 · 4</td><td>Large standard</td><td>¥77.17</td><td>$39.99</td><td>$1.28</td><td style="color:#0d756d;font-weight:700">+3.2%</td></tr>
+      <tr><td>CORE 8x10</td><td>350g仿羊绒+TPR ¥21/㎡</td><td>45×35×25 / 9.0kg</td><td>50×40×40 · 2</td><td>Small bulky</td><td>¥176.36</td><td>$64.79</td><td>−$10.17</td><td style="color:#b34a3c;font-weight:700">−15.7%</td></tr>
+      <tr><td>PREMIUM 8x10</td><td>600g仿羊绒+TPR ¥29/㎡</td><td>45×35×25 / 9.0kg*</td><td>50×40×40 · 2</td><td>Small bulky</td><td>¥243.55</td><td>$94.99</td><td>$0.70</td><td style="color:#0d756d;font-weight:700">+0.7%</td></tr>
+      <tr><td>新 9x12</td><td>350g仿羊绒+TPR ¥21/㎡</td><td>50×44×25 / 12.0kg</td><td>50×44×25 · 1</td><td>Small bulky</td><td>¥238.11</td><td>$155.99</td><td>$35.75</td><td style="color:#0d756d;font-weight:700">+22.9%</td></tr>
+      <tr><td>新 Runner 2x8</td><td>350g仿羊绒+TPR ¥21/㎡</td><td>32×24×11 / 1.65kg</td><td>50×40×40 · 10</td><td>Large standard</td><td>¥35.26</td><td>$37.99</td><td>$10.59</td><td style="color:#0d756d;font-weight:700">+27.9%</td></tr>
+    </tbody></table></div>
+      <div class="chart-conclusion">结论：利润差异的主因是<b>售价相对"固定单件成本"(FBA费+头程)的比例</b>。9x12单件FBA+头程合计约$37.6，但售价$155.99能摊薄到24%；CORE-8x10同样落在Small bulky档(FBA+头程约$30.7)，售价只有$64.79，占比高达47%，所以压不住。Runner 2x8体积小(Large standard，FBA仅$8.52)且单价/平方英尺高，所以利润率最高。*PREMIUM的600g面料实际会比表中单重更重，表中单重沿用供应商350g款包装表，运费可能略低估。</div>
+    </article>
+    <div class="note">2026-10-27重算依据：供应商《地毯供应商报价.xlsx》三张表(报价、仿羊绒TPR底包装、海绵底抽真空包装)。TACoS统一10%、汇率统一¥6.8；各场景的Coupon(0/5/10%)、退货率(3/5.35/8%)、库存周转(18/22/30周)沿用此前假设。报价为<b>不含税</b>价，本页统一按13%增值税折算含税价，<b>该税率是假设，需向供应商确认</b>；MOQ、阶梯价、出厂包装是否另计均未在报价表中给出。此前版本用的是1688展示价和SellerSprite竞品包装代理值，与本版不可直接逐项对比。数据源：<a href="https://rughouse-fba-tools.github.io/fba-calculator/" target="_blank" rel="noopener" style="color:var(--teal)">FBA利润测算台(fork 4)</a>，官方2026-01-15生效FBA费率，普船海派(¥8.2/kg)，未单列进口关税。</div>
     <div class="ai-box risk"><div class="ai-label"><i></i>AI 分析结论</div><ul>
-      <li>广告TACoS改按地毯类目稳定期真实水平（10%，此前Base用15%偏高）、汇率统一为¥6.8后，<b>PREMIUM-8x10的Base场景净利率升到+5.4%（净利润$5.14/件）</b>，ENTRY-5x7 Base也从明显转负收窄到接近打平（-1.6%）——说明上一版偏保守的广告和汇率假设，把这两个方向的真实盈利能力低估了。CORE-8x10仍是三档里最差的（-9.6%），因包装体积较大触发Small bulky尺寸档，FBA费用高达$18.39/件。</li>
-      <li>三个SKU的Base/Conservative场景亏损主因高度一致：FBA费用（Size Tier一旦从Large standard滑到Small bulky，费用跳升明显）+1688采购成本+平台佣金，这三项加起来通常占售价的55-65%——利润改善的杠杆排序应该是：先控制包装尺寸锁定Large standard Tier，再压采购价，广告和退货率的影响相对更小。</li>
-      <li>这套利润模型里的Coupon/退货率都是场景假设而非目标SKU实测值，广告TACoS已按用户提供的类目经验值校准，但当前用的FBA计算台<b>没有单列进口关税</b>——如果实际清关走双清包税或需要单独缴税，PREMIUM-8x10和ENTRY-5x7 Base这两个转正/接近打平的结果大概率会被吃掉。这些数字只能用于"排优先级"，不能用于"批准立项"，这也是为什么Gate状态仍是BLOCKED_FORMAL_INPUTS，不因为算出了正数字就自动解除。</li>
+      <li><b>尺寸选择比材质档位更影响利润</b>：同一款350g TPR面料，Base净利率从5x7的+3.2%、8x10的−15.7%，到9x12的+22.9%和Runner的+27.9%，波动远大于350g→600g升级(PREMIUM)带来的成本差。8x10是最差的尺寸——体积刚好把FBA推进Small bulky档，售价又没有9x12高。</li>
+      <li><b>9x12和Runner值得升级为正式候选</b>，但各有保留：9x12所在$120–199.99价格带在机会矩阵里仍是DOWNGRADE_OBSERVE(8个Parent，月销24,305)，需求面小；Runner 2x8需求面更大(14个Parent，月销83,447，占比11.83%)，但Runner样本是多种长度的混合，这里只测了2x8一种规格，2x6/2x10需要另测。</li>
+      <li><b>CORE-8x10建议停止推进</b>：Optimistic场景(无Coupon、3%退货)都亏损(−5.2%)，已不是"成本再压一压"能解决的问题。若坚持做8x10，应考虑供应商提供的海绵底抽真空包装(42×32×15cm，5.5kg，比水洗底折叠包小一半多)，但<b>水洗底不能抽真空</b>，海绵底不属于"可机洗"细分，等于换了产品定位，需另行评估。</li>
+      <li>结论仍只能用于排优先级：报价是不含税价且无MOQ，税点按13%假设，包装规格来自供应商表而非实测，Gate维持BLOCKED_FORMAL_INPUTS，直到拿到含税正式报价、阶梯价和样品实测尺寸。</li>
     </ul></div>
-
-    <div class="section-head" style="margin-top:36px"><h2 style="font-size:24px">价格矩阵 → 利润机会 交叉验证</h2><p>把"细分×尺寸/形状价格矩阵"（价格矩阵板块）和三档候选SKU的真实尺寸对齐，找出定价偏离真实中位数的地方，并测算一个此前未覆盖的价格带/尺寸组合</p></div>
-    <article class="chart-card">
-      <h3>三档候选 vs 该尺寸真实价格中位数（均为Washable细分）</h3>
-      <div class="table-scroll"><table class="opportunity-table"><thead><tr><th>候选SKU</th><th>测试价</th><th>该尺寸真实中位价</th><th>中位价P25–P75</th><th>价格定位</th><th>该尺寸样本(Parent/月销)</th></tr></thead><tbody>
-        <tr><td>ENTRY-5x7</td><td>$39.99</td><td>$39.99</td><td>$33.37–$52.99</td><td style="color:#0d756d;font-weight:700">贴合中位价</td><td>47 / 210,304</td></tr>
-        <tr><td>CORE-8x10</td><td>$64.79</td><td>$72.89</td><td>$64.79–$94.49</td><td>低于中位价（贴近P25下沿）</td><td>77 / 266,070</td></tr>
-        <tr><td>PREMIUM-8x10</td><td>$94.99</td><td>$72.89</td><td>$64.79–$94.49</td><td style="color:#d7772d;font-weight:700">高于中位价，贴近P75上沿（主动上探人群）</td><td>77 / 266,070</td></tr>
-      </tbody></table></div>
-      <div class="chart-conclusion">结论：ENTRY-5x7的测试价几乎就是该尺寸的真实中位价（真实竞争定价），CORE-8x10反而定在P25附近（比大多数8x10竞品便宜），PREMIUM-8x10定在P75附近属于主动上探——三者亏损/盈利差异不只是成本结构问题，定价相对该尺寸真实分布的位置也是变量之一。</div>
-    </article>
-    <article class="chart-card">
-      <h3>新测算：Washable 9x12（$120–199.99价格带，此前3个候选未覆盖）</h3>
-      <p class="chart-note">价格矩阵真实数据：8 Parent / 月销24,305 / 中位价$155.99(P25 $125.74–P75 $169.99) / 该尺寸price_per_sqft $1.44（是8x10的1.6倍）/ 占Washable细分销量3.45%。但需注意：该价格带在"机会矩阵"里被判为<b>DOWNGRADE_OBSERVE</b>（评分54.5，MEDIUM置信度，13个Parent），不是KEEP_PRIORITY档——测算目的是看"如果做值不值"，不是说明它已经是优先档。</p>
-      <div class="detail-grid" style="grid-template-columns:repeat(3,1fr)">
-        <div class="detail-stat"><span>估算净利润/件</span><b style="color:#0d756d">$38.43</b></div>
-        <div class="detail-stat"><span>估算净利率</span><b style="color:#0d756d">+24.6%</b></div>
-        <div class="detail-stat"><span>数据等级</span><b style="color:#d7772d">估算预览（Tier-C）</b></div>
-      </div>
-      <div class="table-scroll" style="margin-top:12px"><table class="opportunity-table"><thead><tr><th>输入项</th><th>数值</th><th>来源</th></tr></thead><tbody>
-        <tr><td>售价</td><td>$155.99</td><td>真实：价格矩阵9x12中位价</td></tr>
-        <tr><td>外箱尺寸</td><td>62.0×47.2×16.8cm / 10.58kg</td><td><b>估算</b>：按8x10真实包装（53.34×40.64×15.24cm/7.71kg）按面积比(108/80sqft)外推，未实测</td></tr>
-        <tr><td>1688采购成本</td><td>¥240（折$35.29）</td><td><b>估算</b>：按8x10真实1688单价的元/平米比例（约¥24/㎡×10.03㎡）外推，未拿到9x12真实报价</td></tr>
-        <tr><td>头程/FBA/佣金/TACoS/退货/Coupon</td><td>普船海派¥8.2/kg・TACoS10%・退货5.35%・Coupon5%・周转22周</td><td>真实：与ENTRY/CORE/PREMIUM同一套假设，未做场景分档（只测Base）</td></tr>
-      </tbody></table></div>
-      <div class="chart-conclusion">结论：在"包装/成本按面积比外推"的估算前提下，9x12的净利率(+24.6%)明显好于PREMIUM-8x10 Base(+5.4%)——核心原因是9x12真实price_per_sqft($1.44)比8x10($0.91)高60%，而外推成本并未同比例上升，说明<b>这个尺寸如果真实包装/采购成本验证后仍然成立，会是比现有三档更好的切入点</b>。但样本只有8个Parent、评分被打了DOWNGRADE_OBSERVE，且两层关键输入（包装、采购价）都是外推而非实测——下一步必须先拿到9x12真实1688报价和实测外箱尺寸，再决定是否升级为正式候选。</div>
-    </article>
-    <div class="note">Washable <b>Runner</b>尺寸同样值得关注：真实数据price_per_sqft $2.20，是5x7($1.14)的1.9倍，14个Parent / 月销83,447（细分内占比11.83%，仅次于5x7、8x10），但Runner实际长宽跨度很大（常见2x6到2.5x14英尺不等），无法像9x12那样用单一外箱尺寸做可靠外推，硬套一个外箱尺寸会踩到"编造包装尺寸"的红线——本轮登记为<b>数据缺口</b>，需要先拿到几个具体Runner长度段（如2.5x8/2.5x10/2.5x12）的真实1688报价和包装实测数据，才能测算利润，不在本版本给出估算数字。</div>
   </section>
 
   <section class="section">
@@ -294,13 +276,13 @@
       <li>VOC主题率、负评率和Amazon官方退货率分母不同，不直接比较或合并。</li>
       <li>Handmade/Wool仅49条映射Review，VOC结论保持低置信度。</li>
       <li>VOC Rank2与Rank88缺失，保持缺失而不是填0。</li>
-      <li>利润模型的Coupon/TACoS/退货率均为场景假设，非目标SKU实测值；1688为展示价非议价FOB；当前使用的FBA计算台未单列进口关税，实际清关成本可能使净利率进一步下降。</li>
+      <li>利润模型的Coupon/退货率为场景假设；采购价取自供应商不含税报价并按13%税率假设折算，无MOQ/阶梯价；包装规格来自供应商包装表，非实测；FBA计算台未单列进口关税，实际清关成本可能使净利率进一步下降。</li>
       <li>合规、认证、专利、版权和TRO未完成，产品立项不得放行。</li>
       <li>2026-08-27外部审计：曾引用的外部路径 E:\临时下载文件 现场核实不存在，相关"新发现VOC PDF"结论已否决；batch14西柚榜单的"E盘原件已核对"这一溯源声明降级为未验证（文件本身仍在raw、内容未被否定）。</li>
     </ul></article>
     <div class="ai-box"><div class="ai-label"><i></i>AI 分析结论</div><ul>
       <li>这份行业地图的证据等级分层清晰：<b>A级</b>（Amazon官方数据、SellerSprite/西柚交叉验证一致的部分）可以直接支撑机会排序；<b>C/D级</b>（1688展示价、成本假设、独立站GMC样本）只能用于方向判断和场景测算，不能作为最终定价或立项依据——读者引用结论时应该先看这条数字来自哪一级证据，不是所有数字都同等可信。</li>
-      <li>最需要优先补齐的不是新增市场调研，而是三份具体文件：目标SKU的正式FOB报价单、实测包装尺寸重量、Seller Central官方FBA费率预览——这三份文件到位后，本文档里所有BLOCKED_FORMAL_INPUTS标记可以在不重做市场分析的前提下直接更新为正式结论。</li>
+      <li>最需要优先补齐的不是新增市场调研，而是三份具体文件：目标SKU的含税正式报价单(含MOQ/阶梯价)、样品实测包装尺寸重量、Seller Central官方FBA费率预览——这三份文件到位后，本文档里所有BLOCKED_FORMAL_INPUTS标记可以在不重做市场分析的前提下直接更新为正式结论。</li>
     </ul></div>
   </section>
   <footer class="footer"><strong>Amazon US Area Rugs Industry Map v0.10 · 合并可视化版</strong><span>数据冻结：2026-08-27 · 原始数据未修改 · 已通过四轮外部审计+全量路径复查</span></footer>
@@ -776,22 +758,32 @@ const riskCells=[
 
 const profitData={
   core:{scenarios:[
-    {name:'Optimistic',price:69.99,factory:150,factoryUsd:22.06,freight:9.30,fba:18.13,referral:10.50,otherVar:7.08,profit:2.92,margin:0.0417},
-    {name:'Base',price:64.79,factory:168,factoryUsd:24.71,freight:9.30,fba:18.39,referral:9.23,otherVar:15.37,profit:-6.21,margin:-0.0958},
-    {name:'Conservative',price:59.99,factory:210,factoryUsd:30.88,freight:9.30,fba:18.66,referral:8.10,otherVar:10.48,profit:-17.43,margin:-0.2906}
-  ], supplier:'Optimistic/Base=天津盛汇/武清区利吉地毯厂；Conservative=天津市盈通地毯有限公司', current:'¥168'},
+    {name:'Optimistic',price:69.99,factory:176.36,factoryUsd:25.94,freight:10.85,fba:19.48,referral:10.50,otherVar:6.88,profit:-3.66,margin:-0.0523},
+    {name:'Base',price:64.79,factory:176.36,factoryUsd:25.94,freight:10.85,fba:19.80,referral:9.23,otherVar:9.14,profit:-10.17,margin:-0.1570},
+    {name:'Conservative',price:59.99,factory:176.36,factoryUsd:25.94,freight:10.85,fba:20.12,referral:8.10,otherVar:10.63,profit:-15.65,margin:-0.2609}
+  ], supplier:'同上：350g仿羊绒+TPR底 ¥21/㎡(不含税)', current:'¥176(含税)'},
   entry:{scenarios:[
-    {name:'Optimistic',price:44.99,factory:70,factoryUsd:10.29,freight:4.53,fba:10.63,referral:6.75,otherVar:4.75,profit:8.04,margin:0.1787},
-    {name:'Base',price:39.99,factory:92,factoryUsd:13.53,freight:4.53,fba:10.92,referral:5.70,otherVar:5.93,profit:-0.65,margin:-0.0163},
-    {name:'Conservative',price:34.99,factory:104.88,factoryUsd:15.42,freight:4.53,fba:11.13,referral:4.72,otherVar:6.38,profit:-7.19,margin:-0.2055}
-  ], supplier:'均取自天津盛汇地毯有限公司(5x7近似)；Conservative改用翌和(天津)地毯有限公司', current:'¥92'},
+    {name:'Optimistic',price:44.99,factory:77.17,factoryUsd:11.35,freight:4.81,fba:10.57,referral:6.75,otherVar:4.71,profit:6.80,margin:0.1511},
+    {name:'Base',price:39.99,factory:77.17,factoryUsd:11.35,freight:4.81,fba:10.78,referral:5.70,otherVar:6.07,profit:1.28,margin:0.0320},
+    {name:'Conservative',price:34.99,factory:77.17,factoryUsd:11.35,freight:4.81,fba:10.93,referral:4.72,otherVar:6.70,profit:-3.52,margin:-0.1006}
+  ], supplier:'供应商报价表：350g仿羊绒+TPR底 ¥21/㎡(不含税)，×1.13含税', current:'¥77(含税)'},
   premium:{scenarios:[
-    {name:'Optimistic',price:104.99,factory:168,factoryUsd:24.71,freight:10.89,fba:19.63,referral:15.75,otherVar:11.20,profit:22.81,margin:0.2173},
-    {name:'Base',price:94.99,factory:210,factoryUsd:30.88,freight:10.89,fba:20.00,referral:13.54,otherVar:14.54,profit:5.14,margin:0.0541},
-    {name:'Conservative',price:84.99,factory:340,factoryUsd:50.00,freight:10.89,fba:20.37,referral:11.47,otherVar:15.02,profit:-22.76,margin:-0.2678}
-  ], supplier:'Optimistic/Base=天津市武清区利吉地毯厂；Conservative=义乌市金球电子商务（价格跳升至¥340，需人工复核是否同结构）', current:'¥210'}
+    {name:'Optimistic',price:104.99,factory:243.55,factoryUsd:35.82,freight:10.85,fba:19.48,referral:15.75,otherVar:10.87,profit:12.22,margin:0.1164},
+    {name:'Base',price:94.99,factory:243.55,factoryUsd:35.82,freight:10.85,fba:19.80,referral:13.54,otherVar:14.28,profit:0.70,margin:0.0074},
+    {name:'Conservative',price:84.99,factory:243.55,factoryUsd:35.82,freight:10.85,fba:20.12,referral:11.47,otherVar:16.18,profit:-9.45,margin:-0.1112}
+  ], supplier:'同上：600g仿羊绒+TPR底 ¥29/㎡(不含税)，对应"过薄/缺缓冲"升级', current:'¥244(含税)'},
+  x912:{scenarios:[
+    {name:'Optimistic',price:169.99,factory:238.11,factoryUsd:35.02,freight:14.47,fba:22.66,referral:25.50,otherVar:18.65,profit:53.69,margin:0.3158},
+    {name:'Base',price:155.99,factory:238.11,factoryUsd:35.02,freight:14.47,fba:23.10,referral:22.23,otherVar:25.42,profit:35.75,margin:0.2292},
+    {name:'Conservative',price:139.99,factory:238.11,factoryUsd:35.02,freight:14.47,fba:23.55,referral:18.90,otherVar:29.60,profit:18.45,margin:0.1318}
+  ], supplier:'350g仿羊绒+TPR底 ¥21/㎡(不含税)', current:'¥238(含税)'},
+  runner:{scenarios:[
+    {name:'Optimistic',price:41.99,factory:35.26,factoryUsd:5.19,freight:1.99,fba:8.39,referral:6.30,otherVar:4.67,profit:15.45,margin:0.3679},
+    {name:'Base',price:37.99,factory:35.26,factoryUsd:5.19,freight:1.99,fba:8.52,referral:5.41,otherVar:6.29,profit:10.59,margin:0.2788},
+    {name:'Conservative',price:33.99,factory:35.26,factoryUsd:5.19,freight:1.99,fba:8.61,referral:4.59,otherVar:7.34,profit:6.27,margin:0.1845}
+  ], supplier:'350g仿羊绒+TPR底 ¥21/㎡(不含税)', current:'¥35(含税)'}
 };
-const costItemLabels=[['factoryUsd','1688采购成本'],['freight','头程运费'],['fba','FBA费用(仓储+入库+订单处理)'],['referral','平台佣金(已扣Coupon)'],['otherVar','广告+Coupon+退货(合并倒算)']];
+const costItemLabels=[['factoryUsd','供应商采购成本(含13%税)'],['freight','头程运费'],['fba','FBA费用(仓储+入库+订单处理)'],['referral','平台佣金(已扣Coupon)'],['otherVar','广告+Coupon+退货(合并倒算)']];
 
 function renderCellCard(c){
   const topSize=c.sizes[0], topPain=c.pains[0];
@@ -815,8 +807,8 @@ function renderCellCard(c){
       <div style="margin-top:14px"><span style="font-size:10.5px;color:var(--muted)">Base场景各项费用占售价比例（%）</span><div class="chart-box" style="height:200px"><canvas id="ratio_${c.id}"></canvas></div>
         <div class="chart-conclusion">结论：<b>${costItemsRanked[0][0]}</b>占售价比例最高（${(costItemsRanked[0][1]/base.price*100).toFixed(1)}%），是这个场景下最大的单项成本杠杆。</div>
       </div>
-      <table class="opportunity-table" style="margin-top:10px"><thead><tr><th>场景</th><th>售价</th><th>1688成本</th><th>单件利润</th><th>总成本占比</th><th>净利率</th></tr></thead><tbody>${rows}</tbody></table>
-      <div class="supplier-row">1688供应商：${profit.supplier}，当前展示价${profit.current}。总成本占比=1−净利率。2026-08-29起改用<a href="https://lyg15911055415-cyber.github.io/fba-calculator/" target="_blank" rel="noopener" style="color:var(--navy)">FBA利润测算台（lyg15911055415-cyber.github.io/fba-calculator）</a>重新计算：官方2026-01-15生效费率+按包装尺寸反推的外箱/装箱数+普船海派头程(¥8.2/kg,大森林美东经济卡派)。该工具未单列进口关税，"广告+Coupon+退货"为按最终净利率倒算的合并项，非逐项精确拆分。包装/国内运费视为已含在1688采购价内（用户经验判断，未获供应商书面确认，待打样核实）。</div>
+      <table class="opportunity-table" style="margin-top:10px"><thead><tr><th>场景</th><th>售价</th><th>采购成本(¥含税)</th><th>单件利润</th><th>总成本占比</th><th>净利率</th></tr></thead><tbody>${rows}</tbody></table>
+      <div class="supplier-row">供应商：${profit.supplier}，折合含税采购价${profit.current}。总成本占比=1−净利率。2026-10-27起按<b>供应商真实报价+供应商提供的真实折叠尺寸/单重/外箱规格</b>，用<a href="https://rughouse-fba-tools.github.io/fba-calculator/" target="_blank" rel="noopener" style="color:var(--navy)">FBA利润测算台(fork 4)</a>重算：官方2026-01-15费率+供应商外箱规格(直接填入，不再自动反推)+普船海派头程(¥8.2/kg)，TACoS 10%、汇率¥6.8。报价为不含税，按增值税13%折算含税价(<b>税率为假设</b>，需向供应商确认开票税点)；MOQ、是否含出厂包装、600g/350g对应的实际单重均未在报价表中给出，单重沿用供应商包装表数值。该工具未单列进口关税，"广告+Coupon+退货"为倒算合并项。</div>
       <div class="gate-tag">BLOCKED_FORMAL_INPUTS</div></div>`;
   } else if(c.noProfitNote){
     profitBlock = `<div class="block"><h4>产品成本</h4><div class="source-note" style="font-size:11px;color:var(--muted);line-height:1.6">${c.noProfitNote}</div></div>`;
@@ -858,17 +850,17 @@ document.getElementById('riskCells').innerHTML = riskCells.map(c=>renderCellCard
   const p=profitData[c.id];
   if(p){const base=p.scenarios[1]; waterfallChart('wf_'+c.id,[
     {label:'售价',value:base.price,type:'total'},
-    {label:'1688成本',value:-base.factoryUsd},{label:'头程运费',value:-base.freight},{label:'FBA费用',value:-base.fba},
+    {label:'采购成本',value:-base.factoryUsd},{label:'头程运费',value:-base.freight},{label:'FBA费用',value:-base.fba},
     {label:'佣金',value:-base.referral},{label:'广告+Coupon+退货',value:-base.otherVar},{label:'利润',value:base.profit,type:'total'}
   ]);
   hBar('ratio_'+c.id, costItemLabels.map(([k,label])=>({label,value:base[k]/base.price*100,color:'#0d756d'})), {max:Math.max(...costItemLabels.map(([k])=>base[k]/base.price*100))*1.25, padL:172, valueFmt:v=>v.toFixed(1)+'%'});
   }
 });
 
-groupedBar('marginGroupBar', ['ENTRY-5x7','CORE-8x10','PREMIUM-8x10'], [
-  {name:'Optimistic',color:'#0d756d',values:[0.1787,0.0417,0.2173]},
-  {name:'Base',color:'#d7772d',values:[-0.0163,-0.0958,0.0541]},
-  {name:'Conservative',color:'#b34a3c',values:[-0.2055,-0.2906,-0.2678]}
+groupedBar('marginGroupBar', ['ENTRY-5x7','CORE-8x10','PREMIUM-8x10','9x12','Runner 2x8'], [
+  {name:'Optimistic',color:'#0d756d',values:[0.1511,-0.0523,0.1164,0.3158,0.3679]},
+  {name:'Base',color:'#d7772d',values:[0.0320,-0.1570,0.0074,0.2292,0.2788]},
+  {name:'Conservative',color:'#b34a3c',values:[-0.1006,-0.2609,-0.1112,0.1318,0.1845]}
 ]);
 </script>
 </body>
